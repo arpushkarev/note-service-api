@@ -23,6 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type NoteV1Client interface {
 	CreateNote(ctx context.Context, in *CreateNoteRequest, opts ...grpc.CallOption) (*CreateNoteResponse, error)
+	GetNote(ctx context.Context, in *GetNoteRequest, opts ...grpc.CallOption) (*GetNoteResponse, error)
 }
 
 type noteV1Client struct {
@@ -42,11 +43,21 @@ func (c *noteV1Client) CreateNote(ctx context.Context, in *CreateNoteRequest, op
 	return out, nil
 }
 
+func (c *noteV1Client) GetNote(ctx context.Context, in *GetNoteRequest, opts ...grpc.CallOption) (*GetNoteResponse, error) {
+	out := new(GetNoteResponse)
+	err := c.cc.Invoke(ctx, "/api.note_v1.NoteV1/GetNote", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // NoteV1Server is the server API for NoteV1 service.
 // All implementations must embed UnimplementedNoteV1Server
 // for forward compatibility
 type NoteV1Server interface {
 	CreateNote(context.Context, *CreateNoteRequest) (*CreateNoteResponse, error)
+	GetNote(context.Context, *GetNoteRequest) (*GetNoteResponse, error)
 	mustEmbedUnimplementedNoteV1Server()
 }
 
@@ -56,6 +67,9 @@ type UnimplementedNoteV1Server struct {
 
 func (UnimplementedNoteV1Server) CreateNote(context.Context, *CreateNoteRequest) (*CreateNoteResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateNote not implemented")
+}
+func (UnimplementedNoteV1Server) GetNote(context.Context, *GetNoteRequest) (*GetNoteResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetNote not implemented")
 }
 func (UnimplementedNoteV1Server) mustEmbedUnimplementedNoteV1Server() {}
 
@@ -88,6 +102,24 @@ func _NoteV1_CreateNote_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NoteV1_GetNote_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetNoteRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NoteV1Server).GetNote(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.note_v1.NoteV1/GetNote",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NoteV1Server).GetNote(ctx, req.(*GetNoteRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // NoteV1_ServiceDesc is the grpc.ServiceDesc for NoteV1 service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -98,6 +130,10 @@ var NoteV1_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateNote",
 			Handler:    _NoteV1_CreateNote_Handler,
+		},
+		{
+			MethodName: "GetNote",
+			Handler:    _NoteV1_GetNote_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

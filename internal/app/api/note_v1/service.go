@@ -9,3 +9,11 @@ type Note struct {
 func NewNote() *Note {
 	return &Note{}
 }
+
+type IdNote struct {
+	Id int64
+}
+
+func GetNote() *IdNote {
+	return &IdNote{}
+}

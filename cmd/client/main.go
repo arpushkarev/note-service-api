@@ -28,6 +28,16 @@ func main() {
 		log.Println(err.Error())
 	}
 
+	res2, err := client.GetNote(context.Background(), &desc.GetNoteRequest{
+		Id: 1,
+	})
+	if err != nil {
+		log.Println(err.Error())
+	}
+
 	log.Println("Id:", res.Id)
+	log.Println("Got title", res2.Title)
+	log.Println("Got text", res2.Text)
+	log.Println("Got Author", res2.Author)
 
 }
