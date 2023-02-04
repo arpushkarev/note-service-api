@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/arpushkarev/Note-Service-Api/internal/app/api/note_v1"
+	"github.com/arpushkarev/note-service-api/internal/app/api/note_v1"
 	"log"
 	"net"
 
-	desc "github.com/arpushkarev/Note-Service-Api/pkg/note_v1"
+	desc "github.com/arpushkarev/note-service-api/pkg/note_v1"
 	"google.golang.org/grpc"
 )
 

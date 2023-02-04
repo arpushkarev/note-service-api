@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package api.note_v1;
 
-option go_package = "github.com/arpushkarev/Note-Service-Api/pkg/note_v1";
+option go_package = "github.com/arpushkarev/note-service-api/pkg/note_v1";
 
 service NoteV1 {
   rpc CreateNote (CreateNoteRequest) returns (CreateNoteResponse);

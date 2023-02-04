@@ -1,4 +1,4 @@
-module github.com/arpushkarev/Note-Service-Api
+module github.com/arpushkarev/note-service-api
 
 go 1.19
 

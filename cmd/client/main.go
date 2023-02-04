@@ -4,7 +4,7 @@ import (
 	"context"
 	"log"
 
-	desc "github.com/arpushkarev/Note-Service-Api/pkg/note_v1"
+	desc "github.com/arpushkarev/note-service-api/pkg/note_v1"
 	"google.golang.org/grpc"
 )
 

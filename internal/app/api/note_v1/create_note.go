@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	desc "github.com/arpushkarev/Note-Service-Api/pkg/note_v1"
+	desc "github.com/arpushkarev/note-service-api/pkg/note_v1"
 )
 
 func (n *Note) CreateNote(ctx context.Context, req *desc.CreateNoteRequest) (*desc.CreateNoteResponse, error) {
