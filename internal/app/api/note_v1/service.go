@@ -11,9 +11,17 @@ func NewNote() *Note {
 }
 
 type IdNote struct {
-	Id int64
+	desc.UnimplementedNoteV1Server
 }
 
 func GetNote() *IdNote {
 	return &IdNote{}
+}
+
+type ListNotes struct {
+	desc.UnimplementedNoteV1Server
+}
+
+func GetList() *ListNotes {
+	return &ListNotes{}
 }

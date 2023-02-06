@@ -7,7 +7,9 @@ option go_package = "github.com/arpushkarev/note-service-api/pkg/note_v1";
 service NoteV1 {
   rpc CreateNote (CreateNoteRequest) returns (CreateNoteResponse);
   rpc GetNote (GetNoteRequest) returns (GetNoteResponse);
-
+  rpc GetListNote (GetListNoteRequest) returns (GetListNoteResponse);
+  rpc UpdateNote (UpdateNoteRequest) returns (UpdateNoteResponse);
+  rpc DeleteNote (DeleteNoteRequest) returns (DeleteNoteResponse);
 }
 
 message CreateNoteRequest {
@@ -28,4 +30,31 @@ message GetNoteResponse {
   string title = 1;
   string text = 2;
   string author = 3;
+}
+
+message GetListNoteRequest {
+  string list_notes = 1;
+}
+
+message GetListNoteResponse {
+  repeated int64 list_id = 1;
+}
+
+message UpdateNoteRequest {
+  int64 id = 1;
+  string title = 2;
+  string text = 3;
+  string author = 4;
+}
+
+message UpdateNoteResponse {
+  string update_status = 1;
+}
+
+message DeleteNoteRequest {
+  int64 id = 1;
+}
+
+message DeleteNoteResponse {
+  string delete_status = 1;
 }

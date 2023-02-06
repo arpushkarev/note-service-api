@@ -6,7 +6,7 @@ import (
 	desc "github.com/arpushkarev/note-service-api/pkg/note_v1"
 )
 
-func (n *Note) GetNote(ctx context.Context, req *desc.GetNoteRequest) (*desc.GetNoteResponse, error) {
+func (n *IdNote) GetNote(ctx context.Context, req *desc.GetNoteRequest) (*desc.GetNoteResponse, error) {
 	fmt.Println("GetNote")
 	fmt.Println("ID:", req.GetId())
 
