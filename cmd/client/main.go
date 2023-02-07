@@ -59,11 +59,11 @@ func main() {
 		log.Println(err.Error())
 	}
 
-	log.Println("Id:", res.Id)
-	log.Println("Got title", res2.Title)
-	log.Println("Got text", res2.Text)
-	log.Println("Got Author", res2.Author)
-	log.Println("This is the list:", res3.ListId)
+	log.Println("Id:", res.GetId)
+	log.Println("Got title", res2.GetTitle)
+	log.Println("Got text", res2.GetText)
+	log.Println("Got Author", res2.GetAuthor)
+	log.Println("This is the list:", res3.GetListId)
 	log.Println("Status: ", res4.String())
 	log.Println("Status: ", res5.String())
 

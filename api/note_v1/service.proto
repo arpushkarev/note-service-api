@@ -33,7 +33,7 @@ message GetResponse {
 }
 
 message GetListRequest {
-  string list_notes = 1;
+  string notes = 1;
 }
 
 message GetListResponse {
