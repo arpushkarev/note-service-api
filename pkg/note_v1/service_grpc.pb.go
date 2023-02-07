@@ -8,6 +8,7 @@ package note_v1
 
 import (
 	context "context"
+	"github.com/arpushkarev/note-service-api/internal/app/api/note_v1"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -122,7 +123,7 @@ type UnsafeNoteV1Server interface {
 	mustEmbedUnimplementedNoteV1Server()
 }
 
-func RegisterNoteV1Server(s grpc.ServiceRegistrar, srv NoteV1Server) {
+func RegisterNoteV1Server(s grpc.ServiceRegistrar, srv *note_v1.Note) {
 	s.RegisterService(&NoteV1_ServiceDesc, srv)
 }
 

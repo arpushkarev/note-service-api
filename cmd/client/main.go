@@ -52,11 +52,19 @@ func main() {
 		log.Println(err.Error())
 	}
 
+	res5, err := client.DeleteNote(context.Background(), &desc.DeleteNoteRequest{
+		Id: 1,
+	})
+	if err != nil {
+		log.Println(err.Error())
+	}
+
 	log.Println("Id:", res.Id)
 	log.Println("Got title", res2.Title)
 	log.Println("Got text", res2.Text)
 	log.Println("Got Author", res2.Author)
 	log.Println("This is the list:", res3.ListId)
 	log.Println("Status: ", res4.UpdateStatus)
+	log.Println("Status: ", res5.DeleteStatus)
 
 }
