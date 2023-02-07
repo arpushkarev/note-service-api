@@ -19,7 +19,7 @@ func main() {
 
 	client := desc.NewNoteV1Client(con)
 
-	res, err := client.CreateNote(context.Background(), &desc.CreateNoteRequest{
+	res, err := client.Create(context.Background(), &desc.CreateRequest{
 		Title:  "Task1",
 		Text:   "I've got it",
 		Author: "Artem ",
@@ -28,21 +28,21 @@ func main() {
 		log.Println(err.Error())
 	}
 
-	res2, err := client.GetNote(context.Background(), &desc.GetNoteRequest{
+	res2, err := client.Get(context.Background(), &desc.GetRequest{
 		Id: 1,
 	})
 	if err != nil {
 		log.Println(err.Error())
 	}
 
-	res3, err := client.GetListNote(context.Background(), &desc.GetListNoteRequest{
+	res3, err := client.GetList(context.Background(), &desc.GetListRequest{
 		ListNotes: "GetList",
 	})
 	if err != nil {
 		log.Println(err.Error())
 	}
 
-	res4, err := client.UpdateNote(context.Background(), &desc.UpdateNoteRequest{
+	res4, err := client.Update(context.Background(), &desc.UpdateRequest{
 		Id:     1,
 		Title:  "Task1-ruchka4",
 		Text:   "Updated",
@@ -52,7 +52,7 @@ func main() {
 		log.Println(err.Error())
 	}
 
-	res5, err := client.DeleteNote(context.Background(), &desc.DeleteNoteRequest{
+	res5, err := client.Delete(context.Background(), &desc.DeleteRequest{
 		Id: 1,
 	})
 	if err != nil {
@@ -64,7 +64,7 @@ func main() {
 	log.Println("Got text", res2.Text)
 	log.Println("Got Author", res2.Author)
 	log.Println("This is the list:", res3.ListId)
-	log.Println("Status: ", res4.UpdateStatus)
-	log.Println("Status: ", res5.DeleteStatus)
+	log.Println("Status: ", res4.String())
+	log.Println("Status: ", res5.String())
 
 }
