@@ -3,6 +3,7 @@ package note_v1
 import (
 	"context"
 	"fmt"
+
 	desc "github.com/arpushkarev/note-service-api/pkg/note_v1"
 )
 

@@ -19,7 +19,7 @@ func main() {
 	}
 
 	s := grpc.NewServer()
-	desc.RegisterNoteV1Server(s, note_v1.NewNote(), note_v1.GotNote(), note_v1.GotList())
+	desc.RegisterNoteV1Server(s, note_v1.NewNote())
 	//s1 := grpc.NewServer()
 	//desc.RegisterNoteV1Server(s, note_v1.GotNote())
 	//s2 := grpc.NewServer()

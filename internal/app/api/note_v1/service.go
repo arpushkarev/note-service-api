@@ -9,11 +9,3 @@ type Note struct {
 func NewNote() *Note {
 	return &Note{}
 }
-
-func GotNote() *Note {
-	return &Note{}
-}
-
-func GotList() *Note {
-	return &Note{}
-}
