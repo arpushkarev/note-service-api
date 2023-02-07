@@ -21,9 +21,9 @@ func main() {
 	s := grpc.NewServer()
 	desc.RegisterNoteV1Server(s, note_v1.NewNote())
 	s1 := grpc.NewServer()
-	desc.RegisterNoteV1Server(s1, note_v1.GetNote())
+	desc.RegisterNoteV1Server(s1, note_v1.GotNote())
 	s2 := grpc.NewServer()
-	desc.RegisterNoteV1Server(s2, note_v1.GetList())
+	desc.RegisterNoteV1Server(s2, note_v1.GotList())
 
 	fmt.Println("Server is running on port:", port)
 

@@ -14,7 +14,7 @@ type IdNote struct {
 	desc.UnimplementedNoteV1Server
 }
 
-func GetNote() *IdNote {
+func GotNote() *IdNote {
 	return &IdNote{}
 }
 
@@ -22,6 +22,6 @@ type ListNotes struct {
 	desc.UnimplementedNoteV1Server
 }
 
-func GetList() *ListNotes {
+func GotList() *ListNotes {
 	return &ListNotes{}
 }
