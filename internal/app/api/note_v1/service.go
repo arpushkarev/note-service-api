@@ -10,18 +10,10 @@ func NewNote() *Note {
 	return &Note{}
 }
 
-type IdNote struct {
-	desc.UnimplementedNoteV1Server
+func GotNote() *Note {
+	return &Note{}
 }
 
-func GotNote() *IdNote {
-	return &IdNote{}
-}
-
-type ListNotes struct {
-	desc.UnimplementedNoteV1Server
-}
-
-func GotList() *ListNotes {
-	return &ListNotes{}
+func GotList() *Note {
+	return &Note{}
 }

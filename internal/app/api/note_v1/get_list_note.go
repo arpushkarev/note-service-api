@@ -6,7 +6,7 @@ import (
 	desc "github.com/arpushkarev/note-service-api/pkg/note_v1"
 )
 
-func (n *ListNotes) GetList(ctx context.Context, req *desc.GetListNoteRequest) (*desc.GetListNoteResponse, error) {
+func (n *Note) GetList(ctx context.Context, req *desc.GetListNoteRequest) (*desc.GetListNoteResponse, error) {
 	fmt.Println("GetNote")
 	fmt.Println("Enter GetList to look all notes:", req.GetListNotes())
 
