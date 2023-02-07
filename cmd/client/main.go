@@ -42,10 +42,21 @@ func main() {
 		log.Println(err.Error())
 	}
 
+	res4, err := client.UpdateNote(context.Background(), &desc.UpdateNoteRequest{
+		Id:     1,
+		Title:  "Task1-ruchka4",
+		Text:   "Updated",
+		Author: "Pushkarev",
+	})
+	if err != nil {
+		log.Println(err.Error())
+	}
+
 	log.Println("Id:", res.Id)
 	log.Println("Got title", res2.Title)
 	log.Println("Got text", res2.Text)
 	log.Println("Got Author", res2.Author)
 	log.Println("This is the list:", res3.ListId)
+	log.Println("Status: ", res4.UpdateStatus)
 
 }
