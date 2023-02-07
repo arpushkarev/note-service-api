@@ -5,56 +5,52 @@ package api.note_v1;
 option go_package = "github.com/arpushkarev/note-service-api/pkg/note_v1";
 
 service NoteV1 {
-  rpc CreateNote (CreateNoteRequest) returns (CreateNoteResponse);
-  rpc GetNote (GetNoteRequest) returns (GetNoteResponse);
-  rpc GetListNote (GetListNoteRequest) returns (GetListNoteResponse);
-  rpc UpdateNote (UpdateNoteRequest) returns (UpdateNoteResponse);
-  rpc DeleteNote (DeleteNoteRequest) returns (DeleteNoteResponse);
+  rpc Create (CreateRequest) returns (CreateResponse);
+  rpc Get (GetRequest) returns (GetResponse);
+  rpc GetList (GetListRequest) returns (GetListResponse);
+  rpc Update (UpdateRequest) returns (Empty);
+  rpc Delete (DeleteRequest) returns (Empty);
 }
 
-message CreateNoteRequest {
+message CreateRequest {
   string title = 1;
   string text = 2;
   string author = 3;
 }
 
-message CreateNoteResponse {
+message CreateResponse {
   int64 id = 1;
 }
 
-message GetNoteRequest {
+message GetRequest {
   int64 id = 1;
 }
 
-message GetNoteResponse {
+message GetResponse {
   string title = 1;
   string text = 2;
   string author = 3;
 }
 
-message GetListNoteRequest {
+message GetListRequest {
   string list_notes = 1;
 }
 
-message GetListNoteResponse {
+message GetListResponse {
   repeated int64 list_id = 1;
 }
 
-message UpdateNoteRequest {
+message UpdateRequest {
   int64 id = 1;
   string title = 2;
   string text = 3;
   string author = 4;
 }
 
-message UpdateNoteResponse {
-  string update_status = 1;
+message Empty {
+
 }
 
-message DeleteNoteRequest {
+message DeleteRequest {
   int64 id = 1;
-}
-
-message DeleteNoteResponse {
-  string delete_status = 1;
 }

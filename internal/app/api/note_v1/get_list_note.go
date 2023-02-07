@@ -7,10 +7,10 @@ import (
 	desc "github.com/arpushkarev/note-service-api/pkg/note_v1"
 )
 
-func (n *Note) GetListNote(ctx context.Context, req *desc.GetListNoteRequest) (*desc.GetListNoteResponse, error) {
+func (n *Note) GetList(ctx context.Context, req *desc.GetListRequest) (*desc.GetListResponse, error) {
 	fmt.Println("Enter GetList to look all notes:", req.GetListNotes())
 
-	return &desc.GetListNoteResponse{
+	return &desc.GetListResponse{
 		ListId: []int64{1, 3, 2},
 	}, nil
 }
