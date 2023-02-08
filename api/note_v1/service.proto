@@ -37,7 +37,7 @@ message GetListRequest {
 }
 
 message GetListResponse {
-  repeated int64 list_id = 1;
+  repeated Note list = 1;
 }
 
 message UpdateRequest {
@@ -53,4 +53,11 @@ message Empty {
 
 message DeleteRequest {
   int64 id = 1;
+}
+
+message Note {
+  int64 id = 1;
+  string title = 2;
+  string text = 3;
+  string author = 4;
 }
