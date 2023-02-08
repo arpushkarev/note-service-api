@@ -14,7 +14,7 @@ func (n *Implementation) Get(ctx context.Context, req *desc.Empty) (*desc.GetRes
 	return &desc.GetResponse{
 		Note: &desc.Note{
 			Id:     1,
-			Title:  "Funny story",
+			Title:  "Funny story 2",
 			Text:   "kolobok povesilsya",
 			Author: "Some folk",
 		},
