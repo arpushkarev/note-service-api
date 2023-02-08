@@ -14,11 +14,11 @@ type Note struct {
 	Author string
 }
 
-func (n *Implementation) GetList(ctx context.Context, req *desc.GetListRequest) (*desc.GetListResponse, error) {
-	fmt.Println("Enter GetList to look all notes:", req.GetNotes())
+func (n *Implementation) GetList(ctx context.Context, req *desc.Empty) (*desc.GetListResponse, error) {
+	fmt.Println("Enter GetList to look all notes:")
 
 	return &desc.GetListResponse{
-		List: []*desc.Note{
+		Notes: []*desc.Note{
 			{
 				Id:     1,
 				Title:  "Title 1",

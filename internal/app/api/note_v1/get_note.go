@@ -7,13 +7,16 @@ import (
 	desc "github.com/arpushkarev/note-service-api/pkg/note_v1"
 )
 
-func (n *Implementation) Get(ctx context.Context, req *desc.GetRequest) (*desc.GetResponse, error) {
+func (n *Implementation) Get(ctx context.Context, req *desc.Empty) (*desc.GetResponse, error) {
 	fmt.Println("GetNote")
-	fmt.Println("ID:", req.GetId())
+	//fmt.Println("ID:", req.GetId())
 
 	return &desc.GetResponse{
-		Title:  "Note 2",
-		Text:   "Got Note",
-		Author: "Art",
+		Note: &desc.Note{
+			Id:     1,
+			Title:  "Funny story",
+			Text:   "kolobok povesilsya",
+			Author: "Some folk",
+		},
 	}, nil
 }

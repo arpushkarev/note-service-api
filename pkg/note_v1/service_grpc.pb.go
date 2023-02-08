@@ -22,9 +22,9 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type NoteV1Client interface {
-	Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error)
-	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
-	GetList(ctx context.Context, in *GetListRequest, opts ...grpc.CallOption) (*GetListResponse, error)
+	Create(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*CreateResponse, error)
+	Get(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*GetResponse, error)
+	GetList(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*GetListResponse, error)
 	Update(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*Empty, error)
 	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*Empty, error)
 }
@@ -37,7 +37,7 @@ func NewNoteV1Client(cc grpc.ClientConnInterface) NoteV1Client {
 	return &noteV1Client{cc}
 }
 
-func (c *noteV1Client) Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
+func (c *noteV1Client) Create(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*CreateResponse, error) {
 	out := new(CreateResponse)
 	err := c.cc.Invoke(ctx, "/api.note_v1.NoteV1/Create", in, out, opts...)
 	if err != nil {
@@ -46,7 +46,7 @@ func (c *noteV1Client) Create(ctx context.Context, in *CreateRequest, opts ...gr
 	return out, nil
 }
 
-func (c *noteV1Client) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error) {
+func (c *noteV1Client) Get(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*GetResponse, error) {
 	out := new(GetResponse)
 	err := c.cc.Invoke(ctx, "/api.note_v1.NoteV1/Get", in, out, opts...)
 	if err != nil {
@@ -55,7 +55,7 @@ func (c *noteV1Client) Get(ctx context.Context, in *GetRequest, opts ...grpc.Cal
 	return out, nil
 }
 
-func (c *noteV1Client) GetList(ctx context.Context, in *GetListRequest, opts ...grpc.CallOption) (*GetListResponse, error) {
+func (c *noteV1Client) GetList(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*GetListResponse, error) {
 	out := new(GetListResponse)
 	err := c.cc.Invoke(ctx, "/api.note_v1.NoteV1/GetList", in, out, opts...)
 	if err != nil {
@@ -86,9 +86,9 @@ func (c *noteV1Client) Delete(ctx context.Context, in *DeleteRequest, opts ...gr
 // All implementations must embed UnimplementedNoteV1Server
 // for forward compatibility
 type NoteV1Server interface {
-	Create(context.Context, *CreateRequest) (*CreateResponse, error)
-	Get(context.Context, *GetRequest) (*GetResponse, error)
-	GetList(context.Context, *GetListRequest) (*GetListResponse, error)
+	Create(context.Context, *Empty) (*CreateResponse, error)
+	Get(context.Context, *Empty) (*GetResponse, error)
+	GetList(context.Context, *Empty) (*GetListResponse, error)
 	Update(context.Context, *UpdateRequest) (*Empty, error)
 	Delete(context.Context, *DeleteRequest) (*Empty, error)
 	mustEmbedUnimplementedNoteV1Server()
@@ -98,13 +98,13 @@ type NoteV1Server interface {
 type UnimplementedNoteV1Server struct {
 }
 
-func (UnimplementedNoteV1Server) Create(context.Context, *CreateRequest) (*CreateResponse, error) {
+func (UnimplementedNoteV1Server) Create(context.Context, *Empty) (*CreateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
 }
-func (UnimplementedNoteV1Server) Get(context.Context, *GetRequest) (*GetResponse, error) {
+func (UnimplementedNoteV1Server) Get(context.Context, *Empty) (*GetResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
-func (UnimplementedNoteV1Server) GetList(context.Context, *GetListRequest) (*GetListResponse, error) {
+func (UnimplementedNoteV1Server) GetList(context.Context, *Empty) (*GetListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetList not implemented")
 }
 func (UnimplementedNoteV1Server) Update(context.Context, *UpdateRequest) (*Empty, error) {
@@ -127,7 +127,7 @@ func RegisterNoteV1Server(s grpc.ServiceRegistrar, srv NoteV1Server) {
 }
 
 func _NoteV1_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateRequest)
+	in := new(Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -139,13 +139,13 @@ func _NoteV1_Create_Handler(srv interface{}, ctx context.Context, dec func(inter
 		FullMethod: "/api.note_v1.NoteV1/Create",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NoteV1Server).Create(ctx, req.(*CreateRequest))
+		return srv.(NoteV1Server).Create(ctx, req.(*Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _NoteV1_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetRequest)
+	in := new(Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -157,13 +157,13 @@ func _NoteV1_Get_Handler(srv interface{}, ctx context.Context, dec func(interfac
 		FullMethod: "/api.note_v1.NoteV1/Get",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NoteV1Server).Get(ctx, req.(*GetRequest))
+		return srv.(NoteV1Server).Get(ctx, req.(*Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _NoteV1_GetList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetListRequest)
+	in := new(Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -175,7 +175,7 @@ func _NoteV1_GetList_Handler(srv interface{}, ctx context.Context, dec func(inte
 		FullMethod: "/api.note_v1.NoteV1/GetList",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(NoteV1Server).GetList(ctx, req.(*GetListRequest))
+		return srv.(NoteV1Server).GetList(ctx, req.(*Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }

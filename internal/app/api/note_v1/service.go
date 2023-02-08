@@ -6,6 +6,6 @@ type Implementation struct {
 	desc.UnimplementedNoteV1Server
 }
 
-func NewNote() *Implementation {
+func NewImplementation() *Implementation {
 	return &Implementation{}
 }

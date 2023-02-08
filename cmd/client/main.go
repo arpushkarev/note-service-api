@@ -21,25 +21,17 @@ func main() {
 	client := desc.NewNoteV1Client(con)
 	ctx := context.Background()
 
-	resCreate, err := client.Create(ctx, &desc.CreateRequest{
-		Title:  "Task1",
-		Text:   "I've got it",
-		Author: "Artem ",
-	})
+	resCreate, err := client.Create(ctx, &desc.Empty{})
 	if err != nil {
 		log.Println(err.Error())
 	}
 
-	resGet, err := client.Get(ctx, &desc.GetRequest{
-		Id: 1,
-	})
+	resGet, err := client.Get(ctx, &desc.Empty{})
 	if err != nil {
 		log.Println(err.Error())
 	}
 
-	resGetList, err := client.GetList(ctx, &desc.GetListRequest{
-		Notes: "GetList",
-	})
+	resGetList, err := client.GetList(ctx, &desc.Empty{})
 	if err != nil {
 		log.Println(err.Error())
 	}
@@ -62,10 +54,8 @@ func main() {
 	}
 
 	log.Println("Id:", resCreate.GetId())
-	log.Println("Got Title", resGet.GetTitle())
-	log.Println("Got Text", resGet.GetText())
-	log.Println("Got Author", resGet.GetAuthor())
-	log.Println("This is the list:", resGetList.GetList())
+	log.Println("Got Title", resGet.GetNote())
+	log.Println("This is the list:", resGetList.GetNotes())
 	log.Println("Status: ", resUpdate.String())
 	log.Println("Status: ", resDelete.String())
 
