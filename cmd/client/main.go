@@ -21,17 +21,23 @@ func main() {
 	client := desc.NewNoteV1Client(con)
 	ctx := context.Background()
 
-	resCreate, err := client.Create(ctx, &desc.Empty{})
+	resCreate, err := client.Create(ctx, &desc.CreateRequest{
+		Title:  "Repka",
+		Text:   "Posadil ded repku",
+		Author: "Some folk",
+	})
 	if err != nil {
 		log.Println(err.Error())
 	}
 
-	resGet, err := client.Get(ctx, &desc.Empty{})
+	resGet, err := client.Get(ctx, &desc.GetRequest{
+		Id: 1,
+	})
 	if err != nil {
 		log.Println(err.Error())
 	}
 
-	resGetList, err := client.GetList(ctx, &desc.Empty{})
+	resGetAll, err := client.GetAll(ctx, &desc.Empty{})
 	if err != nil {
 		log.Println(err.Error())
 	}
@@ -54,9 +60,9 @@ func main() {
 	}
 
 	log.Println("Id:", resCreate.GetId())
-	log.Println("Got Title", resGet.GetNote())
-	log.Println("This is the list:", resGetList.GetNotes())
-	log.Println("Status: ", resUpdate.String())
-	log.Println("Status: ", resDelete.String())
+	log.Println("Note", resGet.GetNote())
+	log.Println("Notes", resGetAll.GetNotes())
+	log.Println("Updated successfully", resUpdate.String())
+	log.Println("Deleted successfully", resDelete.String())
 
 }
