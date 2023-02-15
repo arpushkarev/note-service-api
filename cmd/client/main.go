@@ -32,7 +32,7 @@ func main() {
 	}
 
 	resGet, err := client.Get(ctx, &desc.GetRequest{
-		Id: 1,
+		Id: 5,
 	})
 	if err != nil {
 		log.Println(err.Error())
@@ -44,7 +44,7 @@ func main() {
 	}
 
 	resUpdate, err := client.Update(ctx, &desc.UpdateRequest{
-		Id:     2,
+		Id:     4,
 		Title:  "Task1-ruchka4",
 		Text:   "Updated",
 		Author: "Pushkarev",

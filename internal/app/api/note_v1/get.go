@@ -34,8 +34,8 @@ func (n *Implementation) Get(ctx context.Context, req *desc.GetRequest) (*desc.G
 	defer db.Close()
 
 	builder := sq.Select("id", "title", "text", "author").
-		From(noteTable).
 		PlaceholderFormat(sq.Dollar).
+		From(noteTable).
 		Where(sq.Eq{"id": req.GetId()})
 
 	query, args, err := builder.ToSql()
@@ -50,18 +50,21 @@ func (n *Implementation) Get(ctx context.Context, req *desc.GetRequest) (*desc.G
 	defer row.Close()
 
 	row.Next()
-	var note desc.Note
-	err = row.Scan(&note)
+	var id int64
+	var (
+		title, text, author string
+	)
+	err = row.Scan(&id, &title, &text, &author)
 	if err != nil {
 		return nil, err
 	}
 
 	return &desc.GetResponse{
 		Note: &desc.Note{
-			Id:     note.Id,
-			Title:  note.Title,
-			Text:   note.Text,
-			Author: note.Text,
+			Id:     id,
+			Title:  title,
+			Text:   text,
+			Author: author,
 		},
 	}, nil
 }
