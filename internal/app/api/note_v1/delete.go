@@ -4,12 +4,37 @@ import (
 	"context"
 	"fmt"
 
+	sq "github.com/Masterminds/squirrel"
 	desc "github.com/arpushkarev/note-service-api/pkg/note_v1"
+	"github.com/jmoiron/sqlx"
 )
 
 func (n *Implementation) Delete(ctx context.Context, req *desc.DeleteRequest) (*desc.Empty, error) {
-	fmt.Println("DeleteNote")
-	fmt.Println("Id:", req.GetId())
+	dbDsn := fmt.Sprintf(
+		"host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
+		host, port, dbUser, dbPassword, dbName, sslMode,
+	)
+
+	db, err := sqlx.Open("pgx", dbDsn)
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+
+	builder := sq.Delete(noteTable).
+		PlaceholderFormat(sq.Dollar).
+		Where(sq.Eq{"id": req.GetId()})
+
+	query, args, err := builder.ToSql()
+	if err != nil {
+		return nil, err
+	}
+
+	row, err := db.QueryContext(ctx, query, args...)
+	if err != nil {
+		return nil, err
+	}
+	defer row.Close()
 
 	return &desc.Empty{}, nil
 }
