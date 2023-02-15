@@ -44,30 +44,25 @@ func (n *Implementation) GetAll(ctx context.Context, req *desc.Empty) (*desc.Get
 	}
 	defer row.Close()
 
-	row.Next()
-	var id int64
-	var (
-		title, text, author string
-	)
-	err = row.Scan(&id, &title, &text, &author)
-	if err != nil {
-		return nil, err
+	var all []*desc.Note
+	for row.Next() {
+		var note *desc.Note
+		var id int64
+		var (
+			title, text, author string
+		)
+		err = row.Scan(&id, &title, &text, &author)
+		if err != nil {
+			return nil, err
+		}
+		note.Id = id
+		note.Title = title
+		note.Text = text
+		note.Title = author
+		all = append(all, note)
 	}
 
 	return &desc.GetAllResponse{
-		Notes: []*desc.Note{
-			{
-				Id:     id,
-				Title:  title,
-				Text:   text,
-				Author: author,
-			},
-			{
-				Id:     id,
-				Title:  title,
-				Text:   text,
-				Author: author,
-			},
-		},
+		Notes: all,
 	}, nil
 }

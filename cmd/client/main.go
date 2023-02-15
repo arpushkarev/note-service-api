@@ -54,7 +54,7 @@ func main() {
 	}
 
 	resDelete, err := client.Delete(ctx, &desc.DeleteRequest{
-		Id: 3,
+		Id: 6,
 	})
 	if err != nil {
 		log.Println(err.Error())
