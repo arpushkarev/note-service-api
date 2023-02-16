@@ -24,7 +24,8 @@ func (n *Implementation) Get(ctx context.Context, req *desc.GetRequest) (*desc.G
 	builder := sq.Select("id", "title", "text", "author").
 		PlaceholderFormat(sq.Dollar).
 		From(noteTable).
-		Where(sq.Eq{"id": req.GetId()})
+		Where(sq.Eq{"id": req.GetId()}).
+		Limit(1)
 
 	query, args, err := builder.ToSql()
 	if err != nil {
