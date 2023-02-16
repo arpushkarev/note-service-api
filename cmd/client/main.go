@@ -32,7 +32,7 @@ func main() {
 	}
 
 	resGet, err := client.Get(ctx, &desc.GetRequest{
-		Id: 5,
+		Id: 4,
 	})
 	if err != nil {
 		log.Println(err.Error())
@@ -54,7 +54,7 @@ func main() {
 	}
 
 	resDelete, err := client.Delete(ctx, &desc.DeleteRequest{
-		Id: 6,
+		Id: 15,
 	})
 	if err != nil {
 		log.Println(err.Error())

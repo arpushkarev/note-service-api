@@ -44,9 +44,9 @@ func (n *Implementation) GetAll(ctx context.Context, req *desc.Empty) (*desc.Get
 	}
 	defer row.Close()
 
-	var all []*desc.Note
+	var all []Note
 	for row.Next() {
-		var note *desc.Note
+		var note Note
 		var id int64
 		var (
 			title, text, author string
@@ -61,8 +61,17 @@ func (n *Implementation) GetAll(ctx context.Context, req *desc.Empty) (*desc.Get
 		note.Title = author
 		all = append(all, note)
 	}
+	var all_desc []*desc.Note
+	for _, elem := range all {
+		all_desc = append(all_desc, &desc.Note{
+			Id:     elem.Id,
+			Title:  elem.Title,
+			Text:   elem.Text,
+			Author: elem.Author,
+		})
+	}
 
 	return &desc.GetAllResponse{
-		Notes: all,
+		Notes: all_desc,
 	}, nil
 }
