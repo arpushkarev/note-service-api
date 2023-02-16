@@ -3,6 +3,7 @@ package note_v1
 import (
 	"context"
 	"fmt"
+	"log"
 
 	sq "github.com/Masterminds/squirrel"
 	desc "github.com/arpushkarev/note-service-api/pkg/note_v1"
@@ -30,11 +31,18 @@ func (n *Implementation) Delete(ctx context.Context, req *desc.DeleteRequest) (*
 		return nil, err
 	}
 
-	row, err := db.QueryContext(ctx, query, args...)
+	res, err := db.ExecContext(ctx, query, args...)
 	if err != nil {
 		return nil, err
 	}
-	defer row.Close()
+
+	row, err := res.RowsAffected()
+	if err != nil {
+		return nil, err
+	}
+	if row != 1 {
+		log.Fatalf("expected to affect 1 row, affected %d", row)
+	}
 
 	return &desc.Empty{}, nil
 }

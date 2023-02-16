@@ -9,19 +9,7 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-//const (
-//	noteTable  = "note"
-//	host       = "localhost"
-//	port       = "54321"
-//	dbUser     = "note-service-user"
-//	dbPassword = "note-service-password"
-//	dbName     = "note-service"
-//	sslMode    = "disable"
-//)
-
 func (n *Implementation) Get(ctx context.Context, req *desc.GetRequest) (*desc.GetResponse, error) {
-	//fmt.Println("GetNote")
-	//fmt.Println("ID:", req.GetId())
 	dbDsn := fmt.Sprintf(
 		"host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
 		host, port, dbUser, dbPassword, dbName, sslMode,

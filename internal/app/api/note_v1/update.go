@@ -3,6 +3,7 @@ package note_v1
 import (
 	"context"
 	"fmt"
+	"log"
 
 	sq "github.com/Masterminds/squirrel"
 	desc "github.com/arpushkarev/note-service-api/pkg/note_v1"
@@ -10,12 +11,6 @@ import (
 )
 
 func (n *Implementation) Update(ctx context.Context, req *desc.UpdateRequest) (*desc.Empty, error) {
-	//fmt.Println("UpdateNote")
-	//fmt.Println("Id:", req.GetId())
-	//fmt.Println("title:", req.GetTitle())
-	//fmt.Println("text:", req.GetText())
-	//fmt.Println("author:", req.GetAuthor())
-
 	dbDsn := fmt.Sprintf(
 		"host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
 		host, port, dbUser, dbPassword, dbName, sslMode,
@@ -39,12 +34,18 @@ func (n *Implementation) Update(ctx context.Context, req *desc.UpdateRequest) (*
 		return nil, err
 	}
 
-	row, err := db.QueryContext(ctx, query, args...)
+	res, err := db.ExecContext(ctx, query, args...)
 	if err != nil {
 		return nil, err
 	}
-	defer row.Close()
+
+	row, err := res.RowsAffected()
+	if err != nil {
+		return nil, err
+	}
+	if row != 1 {
+		log.Fatalf("expected to affect 1 row, affected %d", row)
+	}
 
 	return &desc.Empty{}, nil
-
 }

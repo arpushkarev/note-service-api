@@ -17,7 +17,6 @@ type Note struct {
 }
 
 func (n *Implementation) GetAll(ctx context.Context, req *desc.Empty) (*desc.GetAllResponse, error) {
-	//fmt.Println("GetAll")
 	dbDsn := fmt.Sprintf(
 		"host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
 		host, port, dbUser, dbPassword, dbName, sslMode,
@@ -44,9 +43,8 @@ func (n *Implementation) GetAll(ctx context.Context, req *desc.Empty) (*desc.Get
 	}
 	defer row.Close()
 
-	var all []Note
+	var res []Note
 	for row.Next() {
-		var note Note
 		var id int64
 		var (
 			title, text, author string
@@ -55,15 +53,17 @@ func (n *Implementation) GetAll(ctx context.Context, req *desc.Empty) (*desc.Get
 		if err != nil {
 			return nil, err
 		}
-		note.Id = id
-		note.Title = title
-		note.Text = text
-		note.Title = author
-		all = append(all, note)
+		res = append(res, Note{
+			Id:     id,
+			Title:  title,
+			Text:   text,
+			Author: author,
+		})
 	}
-	var all_desc []*desc.Note
-	for _, elem := range all {
-		all_desc = append(all_desc, &desc.Note{
+
+	var resDesc []*desc.Note
+	for _, elem := range res {
+		resDesc = append(resDesc, &desc.Note{
 			Id:     elem.Id,
 			Title:  elem.Title,
 			Text:   elem.Text,
@@ -72,6 +72,6 @@ func (n *Implementation) GetAll(ctx context.Context, req *desc.Empty) (*desc.Get
 	}
 
 	return &desc.GetAllResponse{
-		Notes: all_desc,
+		Notes: resDesc,
 	}, nil
 }

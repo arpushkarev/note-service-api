@@ -4,10 +4,9 @@ import (
 	"context"
 	"log"
 
-	"google.golang.org/grpc/credentials/insecure"
-
 	desc "github.com/arpushkarev/note-service-api/pkg/note_v1"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 const address = "localhost: 50051"
@@ -44,7 +43,7 @@ func main() {
 	}
 
 	resUpdate, err := client.Update(ctx, &desc.UpdateRequest{
-		Id:     4,
+		Id:     16,
 		Title:  "Task1-ruchka4",
 		Text:   "Updated",
 		Author: "Pushkarev",
@@ -54,7 +53,7 @@ func main() {
 	}
 
 	resDelete, err := client.Delete(ctx, &desc.DeleteRequest{
-		Id: 15,
+		Id: 22,
 	})
 	if err != nil {
 		log.Println(err.Error())
