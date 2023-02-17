@@ -9,13 +9,15 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
+// Note Local structure
 type Note struct {
-	Id     int64
+	ID     int64
 	Title  string
 	Text   string
 	Author string
 }
 
+// GetAll notes from DB
 func (n *Implementation) GetAll(ctx context.Context, req *desc.Empty) (*desc.GetAllResponse, error) {
 	dbDsn := fmt.Sprintf(
 		"host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
@@ -54,7 +56,7 @@ func (n *Implementation) GetAll(ctx context.Context, req *desc.Empty) (*desc.Get
 			return nil, err
 		}
 		res = append(res, Note{
-			Id:     id,
+			ID:     id,
 			Title:  title,
 			Text:   text,
 			Author: author,
@@ -64,7 +66,7 @@ func (n *Implementation) GetAll(ctx context.Context, req *desc.Empty) (*desc.Get
 	var resDesc []*desc.Note
 	for _, elem := range res {
 		resDesc = append(resDesc, &desc.Note{
-			Id:     elem.Id,
+			Id:     elem.ID,
 			Title:  elem.Title,
 			Text:   elem.Text,
 			Author: elem.Author,

@@ -6,7 +6,7 @@ import (
 
 	sq "github.com/Masterminds/squirrel"
 	desc "github.com/arpushkarev/note-service-api/pkg/note_v1"
-	_ "github.com/jackc/pgx/stdlib"
+	_ "github.com/jackc/pgx/stdlib" //just for initialization the driver
 	"github.com/jmoiron/sqlx"
 )
 
@@ -20,6 +20,7 @@ const (
 	sslMode    = "disable"
 )
 
+// Create note with 3 objects Title, Text, Author
 func (n *Implementation) Create(ctx context.Context, req *desc.CreateRequest) (*desc.CreateResponse, error) {
 	dbDsn := fmt.Sprintf(
 		"host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",

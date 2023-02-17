@@ -10,6 +10,7 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
+// Update note by ID
 func (n *Implementation) Update(ctx context.Context, req *desc.UpdateRequest) (*desc.Empty, error) {
 	dbDsn := fmt.Sprintf(
 		"host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",

@@ -9,6 +9,7 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
+// Get note by ID
 func (n *Implementation) Get(ctx context.Context, req *desc.GetRequest) (*desc.GetResponse, error) {
 	dbDsn := fmt.Sprintf(
 		"host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",

@@ -10,4 +10,4 @@ create table note
 );
 
 -- +goose Down
-drop table note
+drop table note;

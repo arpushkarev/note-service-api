@@ -10,6 +10,7 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
+// Delete note by ID
 func (n *Implementation) Delete(ctx context.Context, req *desc.DeleteRequest) (*desc.Empty, error) {
 	dbDsn := fmt.Sprintf(
 		"host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",

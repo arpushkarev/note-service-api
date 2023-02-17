@@ -31,7 +31,7 @@ func main() {
 	}
 
 	resGet, err := client.Get(ctx, &desc.GetRequest{
-		Id: 4,
+		Id: 1,
 	})
 	if err != nil {
 		log.Println(err.Error())
@@ -43,7 +43,7 @@ func main() {
 	}
 
 	resUpdate, err := client.Update(ctx, &desc.UpdateRequest{
-		Id:     16,
+		Id:     2,
 		Title:  "Task1-ruchka4",
 		Text:   "Updated",
 		Author: "Pushkarev",
@@ -53,7 +53,7 @@ func main() {
 	}
 
 	resDelete, err := client.Delete(ctx, &desc.DeleteRequest{
-		Id: 20,
+		Id: 3,
 	})
 	if err != nil {
 		log.Println(err.Error())
