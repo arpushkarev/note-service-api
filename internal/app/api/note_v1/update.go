@@ -44,8 +44,9 @@ func (n *Implementation) Update(ctx context.Context, req *desc.UpdateRequest) (*
 	if err != nil {
 		return nil, err
 	}
+
 	if row != 1 {
-		log.Fatalf("expected to affect 1 row, affected %d", row)
+		log.Printf("expected to affect 1 row, affected %d\n", row)
 	}
 
 	return &desc.Empty{}, nil
