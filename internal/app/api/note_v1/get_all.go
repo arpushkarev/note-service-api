@@ -55,7 +55,6 @@ func (n *Implementation) GetAll(ctx context.Context, req *desc.Empty) (*desc.Get
 		if err != nil {
 			return nil, err
 		}
-
 		res = append(res, Note{
 			ID:     id,
 			Title:  title,
