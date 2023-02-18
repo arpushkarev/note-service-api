@@ -41,6 +41,7 @@ func (n *Implementation) Delete(ctx context.Context, req *desc.DeleteRequest) (*
 	if err != nil {
 		return nil, err
 	}
+
 	if row != 1 {
 		log.Printf("expected to affect 1 row, affected %d\n", row)
 	}
