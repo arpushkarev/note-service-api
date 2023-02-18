@@ -17,7 +17,7 @@ type Note struct {
 	Author string
 }
 
-// GetAll notes from DB
+// GetAll notes from DataBase
 func (n *Implementation) GetAll(ctx context.Context, req *desc.Empty) (*desc.GetAllResponse, error) {
 	dbDsn := fmt.Sprintf(
 		"host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
