@@ -7,6 +7,7 @@ generate:
 				--grpc-gateway_out=pkg/note_v1 \
 				--grpc-gateway_opt=logtostderr=true \
 				--grpc-gateway_opt=paths=source_relative \
+				--validate_out lang=go:pkg/note_v1 --validate_opt=paths=source_relative \
 				--swagger_out=allow_merge=true,merge_file_name=api:pkg/note_v1 \
 				api/note_v1/service.proto
 
@@ -58,7 +59,7 @@ install-go-deps:
 		ls go.mod || go mod init
 		go get -u github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
 		go get -u github.com/golang/protobuf/proto
-		go get -u github.com/golang/protobuf/protoc-gen-go
-		go install github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger
-		go install google.golang.org/grpc/cmd/protoc-gen-go-grpc
+		go get -u google.golang.org/protobuf/protoc-gen-go
+		go install google.golang.org/protobuf/protoc-gen-swagger
+		go get -u google.golang.org/grpc/cmd/protoc-gen-go-grpc
 		go install github.com/envoyproxy/protoc-gen-validate
