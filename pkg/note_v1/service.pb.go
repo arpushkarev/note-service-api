@@ -595,29 +595,29 @@ func file_service_proto_rawDescGZIP() []byte {
 
 var file_service_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_service_proto_goTypes = []interface{}{
-	(*Note)(nil),           // 0: api.note_v1.Note
-	(*Empty)(nil),          // 1: api.note_v1.Empty
-	(*CreateRequest)(nil),  // 2: api.note_v1.CreateRequest
-	(*CreateResponse)(nil), // 3: api.note_v1.CreateResponse
-	(*GetRequest)(nil),     // 4: api.note_v1.GetRequest
-	(*GetResponse)(nil),    // 5: api.note_v1.GetResponse
-	(*GetAllResponse)(nil), // 6: api.note_v1.GetAllResponse
-	(*UpdateRequest)(nil),  // 7: api.note_v1.UpdateRequest
-	(*DeleteRequest)(nil),  // 8: api.note_v1.DeleteRequest
+	(*Note)(nil),           // 0: api.note.Note
+	(*Empty)(nil),          // 1: api.note.Empty
+	(*CreateRequest)(nil),  // 2: api.note.CreateRequest
+	(*CreateResponse)(nil), // 3: api.note.CreateResponse
+	(*GetRequest)(nil),     // 4: api.note.GetRequest
+	(*GetResponse)(nil),    // 5: api.note.GetResponse
+	(*GetAllResponse)(nil), // 6: api.note.GetAllResponse
+	(*UpdateRequest)(nil),  // 7: api.note.UpdateRequest
+	(*DeleteRequest)(nil),  // 8: api.note.DeleteRequest
 }
 var file_service_proto_depIdxs = []int32{
-	0, // 0: api.note_v1.GetResponse.note:type_name -> api.note_v1.Note
-	0, // 1: api.note_v1.GetAllResponse.notes:type_name -> api.note_v1.Note
-	2, // 2: api.note_v1.NoteV1.Create:input_type -> api.note_v1.CreateRequest
-	4, // 3: api.note_v1.NoteV1.Get:input_type -> api.note_v1.GetRequest
-	1, // 4: api.note_v1.NoteV1.GetAll:input_type -> api.note_v1.Empty
-	7, // 5: api.note_v1.NoteV1.Update:input_type -> api.note_v1.UpdateRequest
-	8, // 6: api.note_v1.NoteV1.Delete:input_type -> api.note_v1.DeleteRequest
-	3, // 7: api.note_v1.NoteV1.Create:output_type -> api.note_v1.CreateResponse
-	5, // 8: api.note_v1.NoteV1.Get:output_type -> api.note_v1.GetResponse
-	6, // 9: api.note_v1.NoteV1.GetAll:output_type -> api.note_v1.GetAllResponse
-	1, // 10: api.note_v1.NoteV1.Update:output_type -> api.note_v1.Empty
-	1, // 11: api.note_v1.NoteV1.Delete:output_type -> api.note_v1.Empty
+	0, // 0: api.note.GetResponse.note:type_name -> api.note.Note
+	0, // 1: api.note.GetAllResponse.notes:type_name -> api.note.Note
+	2, // 2: api.note.NoteV1.Create:input_type -> api.note.CreateRequest
+	4, // 3: api.note.NoteV1.Get:input_type -> api.note.GetRequest
+	1, // 4: api.note.NoteV1.GetAll:input_type -> api.note.Empty
+	7, // 5: api.note.NoteV1.Update:input_type -> api.note.UpdateRequest
+	8, // 6: api.note.NoteV1.Delete:input_type -> api.note.DeleteRequest
+	3, // 7: api.note.NoteV1.Create:output_type -> api.note.CreateResponse
+	5, // 8: api.note.NoteV1.Get:output_type -> api.note.GetResponse
+	6, // 9: api.note.NoteV1.GetAll:output_type -> api.note.GetAllResponse
+	1, // 10: api.note.NoteV1.Update:output_type -> api.note.Empty
+	1, // 11: api.note.NoteV1.Delete:output_type -> api.note.Empty
 	7, // [7:12] is the sub-list for method output_type
 	2, // [2:7] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name

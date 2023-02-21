@@ -5,7 +5,7 @@ package api.note_v1;
 import "google/api/annotations.proto";
 import "validate/validate.proto";
 
-option go_package = "github.com/arpushkarev/note-service-api/pkg/note_v1";
+option go_package = "github.com/arpushkarev/note-service-api/pkg/note";
 
 service NoteV1 {
   rpc Create (CreateRequest) returns (CreateResponse){

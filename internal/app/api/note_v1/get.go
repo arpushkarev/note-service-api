@@ -2,59 +2,17 @@ package note_v1
 
 import (
 	"context"
-	"fmt"
 
-	sq "github.com/Masterminds/squirrel"
 	desc "github.com/arpushkarev/note-service-api/pkg/note_v1"
-	"github.com/jmoiron/sqlx"
 )
 
 // Get note by ID
-func (n *Implementation) Get(ctx context.Context, req *desc.GetRequest) (*desc.GetResponse, error) {
-	dbDsn := fmt.Sprintf(
-		"host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
-		host, port, dbUser, dbPassword, dbName, sslMode,
-	)
+func (i *Implementation) Get(ctx context.Context, req *desc.GetRequest) (*desc.GetResponse, error) {
 
-	db, err := sqlx.Open("pgx", dbDsn)
-	if err != nil {
-		return nil, err
-	}
-	defer db.Close()
-
-	builder := sq.Select("id", "title", "text", "author").
-		PlaceholderFormat(sq.Dollar).
-		From(noteTable).
-		Where(sq.Eq{"id": req.GetId()}).
-		Limit(1)
-
-	query, args, err := builder.ToSql()
+	res, err := i.noteService.Get(ctx, req)
 	if err != nil {
 		return nil, err
 	}
 
-	row, err := db.QueryContext(ctx, query, args...)
-	if err != nil {
-		return nil, err
-	}
-	defer row.Close()
-
-	row.Next()
-	var id int64
-	var (
-		title, text, author string
-	)
-	err = row.Scan(&id, &title, &text, &author)
-	if err != nil {
-		return nil, err
-	}
-
-	return &desc.GetResponse{
-		Note: &desc.Note{
-			Id:     id,
-			Title:  title,
-			Text:   text,
-			Author: author,
-		},
-	}, nil
+	return res, nil
 }
