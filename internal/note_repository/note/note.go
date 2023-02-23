@@ -1,16 +1,17 @@
-package repository
+package note
 
 import (
 	"context"
 	"log"
 
 	sq "github.com/Masterminds/squirrel"
-	"github.com/arpushkarev/note-service-api/internal/repository/table"
+	"github.com/arpushkarev/note-service-api/internal/note_repository/table"
 	desc "github.com/arpushkarev/note-service-api/pkg/note_v1"
 	"github.com/jmoiron/sqlx"
 )
 
-type NoteRepository interface {
+// Repository - all our handlers
+type Repository interface {
 	Create(ctx context.Context, req *desc.CreateRequest) (int64, error)
 	Get(ctx context.Context, req *desc.GetRequest) (*Note, error)
 	GetAll(ctx context.Context, req *desc.Empty) ([]*Note, error)
@@ -18,10 +19,12 @@ type NoteRepository interface {
 	Update(ctx context.Context, req *desc.UpdateRequest) error
 }
 
-type Repository struct {
+// Repository - db
+type repository struct {
 	db *sqlx.DB
 }
 
+// Note structure
 type Note struct {
 	ID     int64
 	Title  string
@@ -29,13 +32,15 @@ type Note struct {
 	Author string
 }
 
-func NewNoteRepository(db *sqlx.DB) NoteRepository {
-	return &Repository{
+// NewRepository - initialisation
+func NewRepository(db *sqlx.DB) *repository {
+	return &repository{
 		db: db,
 	}
 }
 
-func (r *Repository) Create(ctx context.Context, req *desc.CreateRequest) (int64, error) {
+// Create new note
+func (r *repository) Create(ctx context.Context, req *desc.CreateRequest) (int64, error) {
 	builder := sq.Insert(table.Note).
 		PlaceholderFormat(sq.Dollar).
 		Columns("title, text, author").
@@ -63,7 +68,8 @@ func (r *Repository) Create(ctx context.Context, req *desc.CreateRequest) (int64
 	return id, err
 }
 
-func (r *Repository) Get(ctx context.Context, req *desc.GetRequest) (*Note, error) {
+// Get the note by ID
+func (r *repository) Get(ctx context.Context, req *desc.GetRequest) (*Note, error) {
 	builder := sq.Select("id", "title", "text", "author").
 		PlaceholderFormat(sq.Dollar).
 		From(table.Note).
@@ -99,7 +105,8 @@ func (r *Repository) Get(ctx context.Context, req *desc.GetRequest) (*Note, erro
 	}, nil
 }
 
-func (r *Repository) GetAll(ctx context.Context, req *desc.Empty) ([]*Note, error) {
+// GetAll notes from DB
+func (r *repository) GetAll(ctx context.Context, req *desc.Empty) ([]*Note, error) {
 	builder := sq.Select("id", "title", "text", "author").
 		PlaceholderFormat(sq.Dollar).
 		From(table.Note)
@@ -147,7 +154,8 @@ func (r *Repository) GetAll(ctx context.Context, req *desc.Empty) ([]*Note, erro
 	return resDesc, nil
 }
 
-func (r *Repository) Delete(ctx context.Context, req *desc.DeleteRequest) error {
+// Delete the Note by ID
+func (r *repository) Delete(ctx context.Context, req *desc.DeleteRequest) error {
 	builder := sq.Delete(table.Note).
 		PlaceholderFormat(sq.Dollar).
 		Where(sq.Eq{"id": req.GetId()})
@@ -174,7 +182,8 @@ func (r *Repository) Delete(ctx context.Context, req *desc.DeleteRequest) error 
 	return nil
 }
 
-func (r *Repository) Update(ctx context.Context, req *desc.UpdateRequest) error {
+// Update the Note by ID
+func (r *repository) Update(ctx context.Context, req *desc.UpdateRequest) error {
 	builder := sq.Update(table.Note).
 		PlaceholderFormat(sq.Dollar).
 		Set("title", req.GetTitle()).

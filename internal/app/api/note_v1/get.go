@@ -8,11 +8,17 @@ import (
 
 // Get note by ID
 func (i *Implementation) Get(ctx context.Context, req *desc.GetRequest) (*desc.GetResponse, error) {
-
 	res, err := i.noteService.Get(ctx, req)
 	if err != nil {
 		return nil, err
 	}
 
-	return res, nil
+	return &desc.GetResponse{
+		Note: &desc.Note{
+			Id:     res.ID,
+			Title:  res.Title,
+			Text:   res.Text,
+			Author: res.Author,
+		},
+	}, nil
 }

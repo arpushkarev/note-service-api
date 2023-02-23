@@ -6,11 +6,12 @@ import (
 	desc "github.com/arpushkarev/note-service-api/pkg/note_v1"
 )
 
-func (s *Service) Update(ctx context.Context, req *desc.UpdateRequest) (*desc.Empty, error) {
+// Update service
+func (s *Service) Update(ctx context.Context, req *desc.UpdateRequest) error {
 	err := s.noteRepository.Update(ctx, req)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return &desc.Empty{}, nil
+	return nil
 }

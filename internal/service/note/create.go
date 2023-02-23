@@ -6,6 +6,7 @@ import (
 	desc "github.com/arpushkarev/note-service-api/pkg/note_v1"
 )
 
+// Create service
 func (s *Service) Create(ctx context.Context, req *desc.CreateRequest) (*desc.CreateResponse, error) {
 	id, err := s.noteRepository.Create(ctx, req)
 	if err != nil {

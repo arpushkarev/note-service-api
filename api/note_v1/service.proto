@@ -14,22 +14,26 @@ service NoteV1 {
       body: "*"
     };
   }
+
   rpc Get (GetRequest) returns (GetResponse){
     option (google.api.http) = {
       get: "/note/v1/get"
     };
   }
+
   rpc GetAll (Empty) returns (GetAllResponse){
     option (google.api.http) = {
       get: "/note/v1/get_all"
     };
   }
+
   rpc Update (UpdateRequest) returns (Empty){
     option (google.api.http) = {
       put: "/note/v1/update"
       body: "*"
     };
   }
+
   rpc Delete (DeleteRequest) returns (Empty){
     option (google.api.http) = {
       delete: "/note/v1/delete"
@@ -49,10 +53,7 @@ message Empty {
 }
 
 message CreateRequest {
-  string title = 1 [(validate.rules).string = {
-    pattern:   "(?i)^[A-Za-z]+$",
-    max_bytes: 32,
-  }];
+  string title = 1 [(validate.rules).string = {pattern: "(?i)^[A-Za-z]+$", max_bytes: 32}];
   string text = 2 [(validate.rules).string.not_contains = "бля"];
   string author = 3;
 }
@@ -62,7 +63,7 @@ message CreateResponse {
 }
 
 message GetRequest {
-  int64 id = 1 [(validate.rules).int64.gte = 1];
+  int64 id = 1 [(validate.rules).int64.gt = 0];
 }
 
 message GetResponse {
@@ -70,20 +71,17 @@ message GetResponse {
 }
 
 message GetAllResponse {
-  repeated Note notes = 1 [(validate.rules).repeated.min_items = 2];
+  repeated Note notes = 1;
 }
 
 message UpdateRequest {
-  int64 id = 1 [(validate.rules).int64.gte = 1];
-  string title = 2 [(validate.rules).string = {
-    pattern:   "(?i)^[A-Za-z]+$",
-    max_bytes: 32,
-  }];
+  int64 id = 1 [(validate.rules).int64.gt = 0];
+  string title = 2 [(validate.rules).string = {pattern: "(?i)^[A-Za-z]+$",max_bytes: 32}];
   string text = 3 [(validate.rules).string.not_contains = "сука"];
   string author = 4;
 }
 
 message DeleteRequest {
-  int64 id = 1 [(validate.rules).int64.gte = 1];
+  int64 id = 1 [(validate.rules).int64.gt = 0];
 }
 

@@ -9,11 +9,12 @@ import (
 	"sync"
 
 	"github.com/arpushkarev/note-service-api/internal/app/api/note_v1"
-	"github.com/arpushkarev/note-service-api/internal/repository"
+	note2 "github.com/arpushkarev/note-service-api/internal/note_repository/note"
 	"github.com/arpushkarev/note-service-api/internal/service/note"
 	desc "github.com/arpushkarev/note-service-api/pkg/note_v1"
 	grpcValidator "github.com/grpc-ecosystem/go-grpc-middleware/validator"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	_ "github.com/jackc/pgx/stdlib" //just for initialization the driver
 	"github.com/jmoiron/sqlx"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -40,12 +41,18 @@ func main() {
 	go func() {
 		defer wg.Done()
 
-		startGRPC()
+		err := startGRPC()
+		if err != nil {
+			log.Fatalf("failed to mapping port: %s", err.Error())
+		}
 	}()
 	go func() {
 		defer wg.Done()
 
-		startHTTP()
+		err := startHTTP()
+		if err != nil {
+			log.Fatalf("failed to mapping port: %s", err.Error())
+		}
 	}()
 
 	wg.Wait()
@@ -54,7 +61,7 @@ func main() {
 func startGRPC() error {
 	list, err := net.Listen("tcp", hostGRPC)
 	if err != nil {
-		log.Fatalf("failed to mapping port: %s", err.Error())
+		return err
 	}
 
 	dbDsn := fmt.Sprintf(
@@ -68,18 +75,18 @@ func startGRPC() error {
 	}
 	defer db.Close()
 
-	noteRepository := repository.NewNoteRepository(db)
+	var noteRepository = note2.NewRepository(db)
 	noteService := note.NewService(noteRepository)
 
 	s := grpc.NewServer(
 		grpc.UnaryInterceptor(grpcValidator.UnaryServerInterceptor()),
 	)
+
 	desc.RegisterNoteV1Server(s, note_v1.NewImplementation(noteService))
 
 	fmt.Println("GRPC server is running on port:", hostGRPC)
 
 	if err = s.Serve(list); err != nil {
-		log.Fatalf("failed to serve: %s", err.Error())
 		return err
 	}
 

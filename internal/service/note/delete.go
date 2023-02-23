@@ -6,11 +6,12 @@ import (
 	desc "github.com/arpushkarev/note-service-api/pkg/note_v1"
 )
 
-func (s *Service) Delete(ctx context.Context, req *desc.DeleteRequest) (*desc.Empty, error) {
+// Delete service
+func (s *Service) Delete(ctx context.Context, req *desc.DeleteRequest) error {
 	err := s.noteRepository.Delete(ctx, req)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return &desc.Empty{}, nil
+	return nil
 }
