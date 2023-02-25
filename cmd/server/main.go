@@ -9,7 +9,7 @@ import (
 	"sync"
 
 	"github.com/arpushkarev/note-service-api/internal/app/api/note_v1"
-	note2 "github.com/arpushkarev/note-service-api/internal/note_repository/note"
+	noteRepository "github.com/arpushkarev/note-service-api/internal/repository/note"
 	"github.com/arpushkarev/note-service-api/internal/service/note"
 	desc "github.com/arpushkarev/note-service-api/pkg/note_v1"
 	grpcValidator "github.com/grpc-ecosystem/go-grpc-middleware/validator"
@@ -21,8 +21,8 @@ import (
 )
 
 const (
-	hostGRPC = "localhost:50051"
-	hostHTTP = "localhost:8090"
+	hostGRPC = "50051"
+	hostHTTP = "8090"
 )
 
 const (
@@ -43,15 +43,16 @@ func main() {
 
 		err := startGRPC()
 		if err != nil {
-			log.Fatalf("failed to mapping port: %s", err.Error())
+			log.Fatalf("GRPCserver error: %s", err.Error())
 		}
 	}()
+
 	go func() {
 		defer wg.Done()
 
 		err := startHTTP()
 		if err != nil {
-			log.Fatalf("failed to mapping port: %s", err.Error())
+			log.Fatalf("HTTPserver error: %s", err.Error())
 		}
 	}()
 
@@ -59,7 +60,7 @@ func main() {
 }
 
 func startGRPC() error {
-	list, err := net.Listen("tcp", hostGRPC)
+	list, err := net.Listen("tcp", fmt.Sprintf("%s:%s", host, hostGRPC))
 	if err != nil {
 		return err
 	}
@@ -75,7 +76,7 @@ func startGRPC() error {
 	}
 	defer db.Close()
 
-	var noteRepository = note2.NewRepository(db)
+	noteRepository := noteRepository.NewRepository(db)
 	noteService := note.NewService(noteRepository)
 
 	s := grpc.NewServer(
@@ -101,12 +102,12 @@ func startHTTP() error {
 	mux := runtime.NewServeMux()
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())} // nolint: staticcheck
 
-	err := desc.RegisterNoteV1HandlerFromEndpoint(ctx, mux, hostGRPC, opts)
+	err := desc.RegisterNoteV1HandlerFromEndpoint(ctx, mux, fmt.Sprintf("%s:%s", host, hostGRPC), opts)
 	if err != nil {
 		return err
 	}
 
 	fmt.Println("HTTP server is running on port:", hostHTTP)
 
-	return http.ListenAndServe(hostHTTP, mux)
+	return http.ListenAndServe(fmt.Sprintf("%s:%s", host, hostHTTP), mux)
 }

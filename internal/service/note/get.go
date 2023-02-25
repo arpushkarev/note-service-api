@@ -3,7 +3,7 @@ package note
 import (
 	"context"
 
-	"github.com/arpushkarev/note-service-api/internal/note_repository/note"
+	"github.com/arpushkarev/note-service-api/internal/repository/note"
 	desc "github.com/arpushkarev/note-service-api/pkg/note_v1"
 )
 

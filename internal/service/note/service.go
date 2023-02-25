@@ -1,7 +1,7 @@
 package note
 
 import (
-	"github.com/arpushkarev/note-service-api/internal/note_repository/note"
+	"github.com/arpushkarev/note-service-api/internal/repository/note"
 )
 
 // Service structure

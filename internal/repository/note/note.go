@@ -5,9 +5,13 @@ import (
 	"log"
 
 	sq "github.com/Masterminds/squirrel"
-	"github.com/arpushkarev/note-service-api/internal/note_repository/table"
+	//"github.com/arpushkarev/note-service-api/internal/repository/table"
 	desc "github.com/arpushkarev/note-service-api/pkg/note_v1"
 	"github.com/jmoiron/sqlx"
+)
+
+const (
+	tableName = "note" // tableName - DB name
 )
 
 // Repository - all our handlers
@@ -41,7 +45,7 @@ func NewRepository(db *sqlx.DB) *repository {
 
 // Create new note
 func (r *repository) Create(ctx context.Context, req *desc.CreateRequest) (int64, error) {
-	builder := sq.Insert(table.Note).
+	builder := sq.Insert(tableName).
 		PlaceholderFormat(sq.Dollar).
 		Columns("title, text, author").
 		Values(req.GetTitle(), req.GetText(), req.GetAuthor()).
@@ -72,7 +76,7 @@ func (r *repository) Create(ctx context.Context, req *desc.CreateRequest) (int64
 func (r *repository) Get(ctx context.Context, req *desc.GetRequest) (*Note, error) {
 	builder := sq.Select("id", "title", "text", "author").
 		PlaceholderFormat(sq.Dollar).
-		From(table.Note).
+		From(tableName).
 		Where(sq.Eq{"id": req.GetId()}).
 		Limit(1)
 
@@ -109,7 +113,7 @@ func (r *repository) Get(ctx context.Context, req *desc.GetRequest) (*Note, erro
 func (r *repository) GetAll(ctx context.Context, req *desc.Empty) ([]*Note, error) {
 	builder := sq.Select("id", "title", "text", "author").
 		PlaceholderFormat(sq.Dollar).
-		From(table.Note)
+		From(tableName)
 
 	query, args, err := builder.ToSql()
 	if err != nil {
@@ -156,7 +160,7 @@ func (r *repository) GetAll(ctx context.Context, req *desc.Empty) ([]*Note, erro
 
 // Delete the Note by ID
 func (r *repository) Delete(ctx context.Context, req *desc.DeleteRequest) error {
-	builder := sq.Delete(table.Note).
+	builder := sq.Delete(tableName).
 		PlaceholderFormat(sq.Dollar).
 		Where(sq.Eq{"id": req.GetId()})
 
@@ -184,7 +188,7 @@ func (r *repository) Delete(ctx context.Context, req *desc.DeleteRequest) error 
 
 // Update the Note by ID
 func (r *repository) Update(ctx context.Context, req *desc.UpdateRequest) error {
-	builder := sq.Update(table.Note).
+	builder := sq.Update(tableName).
 		PlaceholderFormat(sq.Dollar).
 		Set("title", req.GetTitle()).
 		Set("text", req.GetText()).

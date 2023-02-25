@@ -7,13 +7,11 @@ import (
 )
 
 // Create service
-func (s *Service) Create(ctx context.Context, req *desc.CreateRequest) (*desc.CreateResponse, error) {
+func (s *Service) Create(ctx context.Context, req *desc.CreateRequest) (int64, error) {
 	id, err := s.noteRepository.Create(ctx, req)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
 
-	return &desc.CreateResponse{
-		Id: id,
-	}, nil
+	return id, err
 }
