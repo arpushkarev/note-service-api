@@ -5,13 +5,12 @@ import (
 	"log"
 
 	sq "github.com/Masterminds/squirrel"
-	//"github.com/arpushkarev/note-service-api/internal/repository/table"
 	desc "github.com/arpushkarev/note-service-api/pkg/note_v1"
 	"github.com/jmoiron/sqlx"
 )
 
 const (
-	tableName = "note" // tableName - DB name
+	tableName = "note"
 )
 
 // Repository - all our handlers

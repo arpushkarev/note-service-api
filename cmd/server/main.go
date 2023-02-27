@@ -21,8 +21,8 @@ import (
 )
 
 const (
-	hostGRPC = "50051"
-	hostHTTP = "8090"
+	grpcPort = "50051"
+	httpPort = "8090"
 )
 
 const (
@@ -60,7 +60,7 @@ func main() {
 }
 
 func startGRPC() error {
-	list, err := net.Listen("tcp", fmt.Sprintf("%s:%s", host, hostGRPC))
+	list, err := net.Listen("tcp", fmt.Sprintf("%s:%s", host, grpcPort))
 	if err != nil {
 		return err
 	}
@@ -85,7 +85,7 @@ func startGRPC() error {
 
 	desc.RegisterNoteV1Server(s, note_v1.NewImplementation(noteService))
 
-	fmt.Println("GRPC server is running on port:", hostGRPC)
+	fmt.Println("GRPC server is running on port:", grpcPort)
 
 	if err = s.Serve(list); err != nil {
 		return err
@@ -102,12 +102,12 @@ func startHTTP() error {
 	mux := runtime.NewServeMux()
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())} // nolint: staticcheck
 
-	err := desc.RegisterNoteV1HandlerFromEndpoint(ctx, mux, fmt.Sprintf("%s:%s", host, hostGRPC), opts)
+	err := desc.RegisterNoteV1HandlerFromEndpoint(ctx, mux, fmt.Sprintf("%s:%s", host, grpcPort), opts)
 	if err != nil {
 		return err
 	}
 
-	fmt.Println("HTTP server is running on port:", hostHTTP)
+	fmt.Println("HTTP server is running on port:", httpPort)
 
-	return http.ListenAndServe(fmt.Sprintf("%s:%s", host, hostHTTP), mux)
+	return http.ListenAndServe(fmt.Sprintf("%s:%s", host, httpPort), mux)
 }
