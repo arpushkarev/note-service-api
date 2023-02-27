@@ -2,19 +2,18 @@ package note_v1
 
 import (
 	"context"
-	"fmt"
 
 	desc "github.com/arpushkarev/note-service-api/pkg/note_v1"
 )
 
-func (n *Implementation) Create(ctx context.Context, req *desc.CreateRequest) (*desc.CreateResponse, error) {
-	fmt.Println("CreateNote")
-	fmt.Println("title:", req.GetTitle())
-	fmt.Println("text:", req.GetText())
-	fmt.Println("author:", req.GetAuthor())
+// Create note with 3 fields Title, Text, Author
+func (i *Implementation) Create(ctx context.Context, req *desc.CreateRequest) (*desc.CreateResponse, error) {
+	id, err := i.noteService.Create(ctx, req)
+	if err != nil {
+		return nil, err
+	}
 
 	return &desc.CreateResponse{
-		Id: 1,
+		Id: id,
 	}, nil
-
 }

@@ -2,21 +2,23 @@ package note_v1
 
 import (
 	"context"
-	"fmt"
 
 	desc "github.com/arpushkarev/note-service-api/pkg/note_v1"
 )
 
-func (n *Implementation) Get(ctx context.Context, req *desc.GetRequest) (*desc.GetResponse, error) {
-	fmt.Println("GetNote")
-	fmt.Println("ID:", req.GetId())
+// Get note by ID
+func (i *Implementation) Get(ctx context.Context, req *desc.GetRequest) (*desc.GetResponse, error) {
+	res, err := i.noteService.Get(ctx, req)
+	if err != nil {
+		return nil, err
+	}
 
 	return &desc.GetResponse{
 		Note: &desc.Note{
-			Id:     1,
-			Title:  "Funny story 2",
-			Text:   "kolobok povesilsya",
-			Author: "Some folk",
+			Id:     res.ID,
+			Title:  res.Title,
+			Text:   res.Text,
+			Author: res.Author,
 		},
 	}, nil
 }

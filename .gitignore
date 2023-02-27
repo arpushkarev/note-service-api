@@ -1,1 +1,3 @@
 .idea
+.golangci.pipeline.yaml
+/vendor.protogen/
