@@ -39,7 +39,7 @@ func NewNoteV1Client(cc grpc.ClientConnInterface) NoteV1Client {
 
 func (c *noteV1Client) Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
 	out := new(CreateResponse)
-	err := c.cc.Invoke(ctx, "/api.note_v1.NoteV1/Create", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.note.NoteV1/Create", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +48,7 @@ func (c *noteV1Client) Create(ctx context.Context, in *CreateRequest, opts ...gr
 
 func (c *noteV1Client) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error) {
 	out := new(GetResponse)
-	err := c.cc.Invoke(ctx, "/api.note_v1.NoteV1/Get", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.note.NoteV1/Get", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -57,7 +57,7 @@ func (c *noteV1Client) Get(ctx context.Context, in *GetRequest, opts ...grpc.Cal
 
 func (c *noteV1Client) GetAll(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*GetAllResponse, error) {
 	out := new(GetAllResponse)
-	err := c.cc.Invoke(ctx, "/api.note_v1.NoteV1/GetAll", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.note.NoteV1/GetAll", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -66,7 +66,7 @@ func (c *noteV1Client) GetAll(ctx context.Context, in *Empty, opts ...grpc.CallO
 
 func (c *noteV1Client) Update(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*Empty, error) {
 	out := new(Empty)
-	err := c.cc.Invoke(ctx, "/api.note_v1.NoteV1/Update", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.note.NoteV1/Update", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +75,7 @@ func (c *noteV1Client) Update(ctx context.Context, in *UpdateRequest, opts ...gr
 
 func (c *noteV1Client) Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*Empty, error) {
 	out := new(Empty)
-	err := c.cc.Invoke(ctx, "/api.note_v1.NoteV1/Delete", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/api.note.NoteV1/Delete", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -136,7 +136,7 @@ func _NoteV1_Create_Handler(srv interface{}, ctx context.Context, dec func(inter
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.note_v1.NoteV1/Create",
+		FullMethod: "/api.note.NoteV1/Create",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(NoteV1Server).Create(ctx, req.(*CreateRequest))
@@ -154,7 +154,7 @@ func _NoteV1_Get_Handler(srv interface{}, ctx context.Context, dec func(interfac
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.note_v1.NoteV1/Get",
+		FullMethod: "/api.note.NoteV1/Get",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(NoteV1Server).Get(ctx, req.(*GetRequest))
@@ -172,7 +172,7 @@ func _NoteV1_GetAll_Handler(srv interface{}, ctx context.Context, dec func(inter
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.note_v1.NoteV1/GetAll",
+		FullMethod: "/api.note.NoteV1/GetAll",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(NoteV1Server).GetAll(ctx, req.(*Empty))
@@ -190,7 +190,7 @@ func _NoteV1_Update_Handler(srv interface{}, ctx context.Context, dec func(inter
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.note_v1.NoteV1/Update",
+		FullMethod: "/api.note.NoteV1/Update",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(NoteV1Server).Update(ctx, req.(*UpdateRequest))
@@ -208,7 +208,7 @@ func _NoteV1_Delete_Handler(srv interface{}, ctx context.Context, dec func(inter
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/api.note_v1.NoteV1/Delete",
+		FullMethod: "/api.note.NoteV1/Delete",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(NoteV1Server).Delete(ctx, req.(*DeleteRequest))
@@ -220,7 +220,7 @@ func _NoteV1_Delete_Handler(srv interface{}, ctx context.Context, dec func(inter
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var NoteV1_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "api.note_v1.NoteV1",
+	ServiceName: "api.note.NoteV1",
 	HandlerType: (*NoteV1Server)(nil),
 	Methods: []grpc.MethodDesc{
 		{
