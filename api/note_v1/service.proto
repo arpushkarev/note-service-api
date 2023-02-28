@@ -4,6 +4,7 @@ package api.note_v1;
 
 import "google/api/annotations.proto";
 import "validate/validate.proto";
+import "google/protobuf/wrappers.proto";
 
 option go_package = "github.com/arpushkarev/note-service-api/pkg/note";
 
@@ -41,11 +42,21 @@ service NoteV1 {
   };
 }
 
+message NoteInfo {
+  string title = 1 [(validate.rules).string = {pattern: "(?i)^[A-Za-z]+$", max_bytes: 32}];
+  string text = 2 [(validate.rules).string.not_contains = "бля"];
+  string author = 3;
+}
+
 message Note {
   int64 id = 1;
-  string title = 2;
-  string text = 3;
-  string author = 4;
+  NoteInfo note = 2;
+}
+
+message UpdateNoteInfo {
+  google.protobuf.StringValue title = 1 [(validate.rules).string = {pattern: "(?i)^[A-Za-z]+$",max_bytes: 32}];
+  google.protobuf.StringValue text = 2 [(validate.rules).string.not_contains = "сука"];
+  google.protobuf.StringValue author = 3;
 }
 
 message Empty {
@@ -53,9 +64,8 @@ message Empty {
 }
 
 message CreateRequest {
-  string title = 1 [(validate.rules).string = {pattern: "(?i)^[A-Za-z]+$", max_bytes: 32}];
-  string text = 2 [(validate.rules).string.not_contains = "бля"];
-  string author = 3;
+  int64 id = 1;
+  NoteInfo note = 2;
 }
 
 message CreateResponse {
@@ -76,9 +86,7 @@ message GetAllResponse {
 
 message UpdateRequest {
   int64 id = 1 [(validate.rules).int64.gt = 0];
-  string title = 2 [(validate.rules).string = {pattern: "(?i)^[A-Za-z]+$",max_bytes: 32}];
-  string text = 3 [(validate.rules).string.not_contains = "сука"];
-  string author = 4;
+  UpdateNoteInfo note = 2;
 }
 
 message DeleteRequest {

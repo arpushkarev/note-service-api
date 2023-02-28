@@ -27,12 +27,16 @@ type repository struct {
 	db *sqlx.DB
 }
 
-// Note structure
-type Note struct {
-	ID     int64
+type Info struct {
 	Title  string
 	Text   string
 	Author string
+}
+
+// Note structure
+type Note struct {
+	ID   int64
+	Info Info
 }
 
 // NewRepository - initialisation
@@ -47,7 +51,7 @@ func (r *repository) Create(ctx context.Context, req *desc.CreateRequest) (int64
 	builder := sq.Insert(tableName).
 		PlaceholderFormat(sq.Dollar).
 		Columns("title, text, author").
-		Values(req.GetTitle(), req.GetText(), req.GetAuthor()).
+		Values(req.GetNote().GetTitle(), req.GetNote().GetText(), req.GetNote().GetAuthor()).
 		Suffix("returning id")
 
 	query, args, err := builder.ToSql()
@@ -101,10 +105,12 @@ func (r *repository) Get(ctx context.Context, req *desc.GetRequest) (*Note, erro
 	}
 
 	return &Note{
-		ID:     id,
-		Title:  title,
-		Text:   text,
-		Author: author,
+		ID: id,
+		Info: Info{
+			Title:  title,
+			Text:   text,
+			Author: author,
+		},
 	}, nil
 }
 
@@ -137,20 +143,20 @@ func (r *repository) GetAll(ctx context.Context, req *desc.Empty) ([]*Note, erro
 		}
 
 		res = append(res, Note{
-			ID:     id,
-			Title:  title,
-			Text:   text,
-			Author: author,
+			ID: id,
+			Info: Info{
+				Title:  title,
+				Text:   text,
+				Author: author,
+			},
 		})
 	}
 
 	var resDesc []*Note
 	for _, elem := range res {
 		resDesc = append(resDesc, &Note{
-			ID:     elem.ID,
-			Title:  elem.Title,
-			Text:   elem.Text,
-			Author: elem.Author,
+			ID:   elem.ID,
+			Info: elem.Info,
 		})
 	}
 
@@ -189,10 +195,19 @@ func (r *repository) Delete(ctx context.Context, req *desc.DeleteRequest) error 
 func (r *repository) Update(ctx context.Context, req *desc.UpdateRequest) error {
 	builder := sq.Update(tableName).
 		PlaceholderFormat(sq.Dollar).
-		Set("title", req.GetTitle()).
-		Set("text", req.GetText()).
-		Set("author", req.GetAuthor()).
 		Where(sq.Eq{"id": req.GetId()})
+
+	if req.GetNote().GetTitle() != nil {
+		builder.Set("title", req.GetNote().GetTitle())
+	}
+
+	if req.GetNote().GetText() != nil {
+		builder.Set("text", req.GetNote().GetText())
+	}
+
+	if req.GetNote().GetAuthor() != nil {
+		builder.Set("author", req.GetNote().GetAuthor())
+	}
 
 	query, args, err := builder.ToSql()
 	if err != nil {
