@@ -8,7 +8,7 @@ import (
 
 // Delete note by ID
 func (i *Implementation) Delete(ctx context.Context, req *desc.DeleteRequest) (*desc.Empty, error) {
-	err := i.noteService.Delete(ctx, req)
+	err := i.noteService.Delete(ctx, req.GetId())
 	if err != nil {
 		return nil, err
 	}

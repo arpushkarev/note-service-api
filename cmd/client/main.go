@@ -7,6 +7,7 @@ import (
 	desc "github.com/arpushkarev/note-service-api/pkg/note_v1"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/protobuf/types/known/wrapperspb"
 )
 
 const address = "localhost: 50051"
@@ -22,9 +23,11 @@ func main() {
 	ctx := context.Background()
 
 	resCreate, err := client.Create(ctx, &desc.CreateRequest{
-		Title:  "Repka",
-		Text:   "Posadil ded repku4",
-		Author: "Some folk2",
+		Note: &desc.NoteInfo{
+			Title:  "Repka",
+			Text:   "Posadil ded repku4",
+			Author: "Some folk2",
+		},
 	})
 	if err != nil {
 		log.Println(err.Error())
@@ -43,10 +46,12 @@ func main() {
 	}
 
 	resUpdate, err := client.Update(ctx, &desc.UpdateRequest{
-		Id:     2,
-		Title:  "Task1-ruchka4",
-		Text:   "Updated",
-		Author: "Pushkarev",
+		Id: 2,
+		Note: &desc.UpdateNoteInfo{
+			Title:  &wrapperspb.StringValue{Value: "Update"},
+			Text:   &wrapperspb.StringValue{Value: "Updated"},
+			Author: &wrapperspb.StringValue{Value: "Pushkarev"},
+		},
 	})
 	if err != nil {
 		log.Println(err.Error())

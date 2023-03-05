@@ -5,8 +5,9 @@ import (
 	"log"
 
 	sq "github.com/Masterminds/squirrel"
+	"github.com/arpushkarev/note-service-api/internal/model"
+	"github.com/arpushkarev/note-service-api/internal/pkg/db"
 	desc "github.com/arpushkarev/note-service-api/pkg/note_v1"
-	"github.com/jmoiron/sqlx"
 )
 
 const (
@@ -15,16 +16,16 @@ const (
 
 // Repository - all our handlers
 type Repository interface {
-	Create(ctx context.Context, req *desc.CreateRequest) (int64, error)
-	Get(ctx context.Context, req *desc.GetRequest) (*Note, error)
-	GetAll(ctx context.Context, req *desc.Empty) ([]*Note, error)
-	Delete(ctx context.Context, req *desc.DeleteRequest) error
-	Update(ctx context.Context, req *desc.UpdateRequest) error
+	Create(ctx context.Context, noteInfo *model.NoteInfo) (int64, error)
+	Get(ctx context.Context, id int64) (*model.Note, error)
+	GetAll(ctx context.Context, req *desc.Empty) ([]*model.Note, error)
+	Delete(ctx context.Context, id int64) error
+	Update(ctx context.Context, req *model.UpdateNoteInfo) error
 }
 
 // Repository - db
 type repository struct {
-	db *sqlx.DB
+	client db.Client
 }
 
 type Info struct {
@@ -40,18 +41,18 @@ type Note struct {
 }
 
 // NewRepository - initialisation
-func NewRepository(db *sqlx.DB) *repository {
+func NewRepository(client db.Client) *repository {
 	return &repository{
-		db: db,
+		client: client,
 	}
 }
 
 // Create new note
-func (r *repository) Create(ctx context.Context, req *desc.CreateRequest) (int64, error) {
+func (r *repository) Create(ctx context.Context, noteInfo *model.NoteInfo) (int64, error) {
 	builder := sq.Insert(tableName).
 		PlaceholderFormat(sq.Dollar).
 		Columns("title, text, author").
-		Values(req.GetNote().GetTitle(), req.GetNote().GetText(), req.GetNote().GetAuthor()).
+		Values(noteInfo.Title, noteInfo.Text, noteInfo.Author).
 		Suffix("returning id")
 
 	query, args, err := builder.ToSql()
@@ -59,7 +60,12 @@ func (r *repository) Create(ctx context.Context, req *desc.CreateRequest) (int64
 		return 0, err
 	}
 
-	row, err := r.db.QueryContext(ctx, query, args...)
+	q := db.Query{
+		Name:     "Create",
+		QueryRaw: query,
+	}
+
+	row, err := r.client.DB().QueryContext(ctx, q, args...)
 	if err != nil {
 		return 0, err
 	}
@@ -76,11 +82,11 @@ func (r *repository) Create(ctx context.Context, req *desc.CreateRequest) (int64
 }
 
 // Get the note by ID
-func (r *repository) Get(ctx context.Context, req *desc.GetRequest) (*Note, error) {
+func (r *repository) Get(ctx context.Context, id int64) (*model.Note, error) {
 	builder := sq.Select("id", "title", "text", "author").
 		PlaceholderFormat(sq.Dollar).
 		From(tableName).
-		Where(sq.Eq{"id": req.GetId()}).
+		Where(sq.Eq{"id": id}).
 		Limit(1)
 
 	query, args, err := builder.ToSql()
@@ -88,34 +94,23 @@ func (r *repository) Get(ctx context.Context, req *desc.GetRequest) (*Note, erro
 		return nil, err
 	}
 
-	row, err := r.db.QueryContext(ctx, query, args...)
-	if err != nil {
-		return nil, err
+	q := db.Query{
+		Name:     "Get",
+		QueryRaw: query,
 	}
-	defer row.Close()
 
-	row.Next()
-	var id int64
-	var (
-		title, text, author string
-	)
-	err = row.Scan(&id, &title, &text, &author)
+	var note model.Note
+
+	err = r.client.DB().GetContext(ctx, &note, q, args...)
 	if err != nil {
 		return nil, err
 	}
 
-	return &Note{
-		ID: id,
-		Info: Info{
-			Title:  title,
-			Text:   text,
-			Author: author,
-		},
-	}, nil
+	return &note, nil
 }
 
 // GetAll notes from DB
-func (r *repository) GetAll(ctx context.Context, req *desc.Empty) ([]*Note, error) {
+func (r *repository) GetAll(ctx context.Context, req *desc.Empty) ([]*model.Note, error) {
 	builder := sq.Select("id", "title", "text", "author").
 		PlaceholderFormat(sq.Dollar).
 		From(tableName)
@@ -125,64 +120,43 @@ func (r *repository) GetAll(ctx context.Context, req *desc.Empty) ([]*Note, erro
 		return nil, err
 	}
 
-	row, err := r.db.QueryContext(ctx, query, args...)
+	q := db.Query{
+		Name:     "GetAll",
+		QueryRaw: query,
+	}
+
+	var notes []*model.Note
+
+	err = r.client.DB().SelectContext(ctx, notes, q, args...)
 	if err != nil {
 		return nil, err
 	}
-	defer row.Close()
 
-	var res []Note
-	for row.Next() {
-		var id int64
-		var (
-			title, text, author string
-		)
-		err = row.Scan(&id, &title, &text, &author)
-		if err != nil {
-			return nil, err
-		}
-
-		res = append(res, Note{
-			ID: id,
-			Info: Info{
-				Title:  title,
-				Text:   text,
-				Author: author,
-			},
-		})
-	}
-
-	var resDesc []*Note
-	for _, elem := range res {
-		resDesc = append(resDesc, &Note{
-			ID:   elem.ID,
-			Info: elem.Info,
-		})
-	}
-
-	return resDesc, nil
+	return notes, nil
 }
 
 // Delete the Note by ID
-func (r *repository) Delete(ctx context.Context, req *desc.DeleteRequest) error {
+func (r *repository) Delete(ctx context.Context, id int64) error {
 	builder := sq.Delete(tableName).
 		PlaceholderFormat(sq.Dollar).
-		Where(sq.Eq{"id": req.GetId()})
+		Where(sq.Eq{"id": id})
 
 	query, args, err := builder.ToSql()
 	if err != nil {
 		return err
 	}
 
-	res, err := r.db.ExecContext(ctx, query, args...)
+	q := db.Query{
+		Name:     "Update",
+		QueryRaw: query,
+	}
+
+	res, err := r.client.DB().ExecContext(ctx, q, args...)
 	if err != nil {
 		return err
 	}
 
-	row, err := res.RowsAffected()
-	if err != nil {
-		return err
-	}
+	row := res.RowsAffected()
 
 	if row != 1 {
 		log.Printf("expected to affect 1 row, affected %d\n", row)
@@ -192,21 +166,21 @@ func (r *repository) Delete(ctx context.Context, req *desc.DeleteRequest) error 
 }
 
 // Update the Note by ID
-func (r *repository) Update(ctx context.Context, req *desc.UpdateRequest) error {
+func (r *repository) Update(ctx context.Context, updateNote *model.UpdateNoteInfo) error {
 	builder := sq.Update(tableName).
 		PlaceholderFormat(sq.Dollar).
-		Where(sq.Eq{"id": req.GetId()})
+		Where(sq.Eq{"id": updateNote})
 
-	if req.GetNote().GetTitle() != nil {
-		builder.Set("title", req.GetNote().GetTitle())
+	if updateNote.Title.Valid {
+		builder.Set("title", updateNote.Title.String)
 	}
 
-	if req.GetNote().GetText() != nil {
-		builder.Set("text", req.GetNote().GetText())
+	if updateNote.Text.Valid {
+		builder.Set("text", updateNote.Text.String)
 	}
 
-	if req.GetNote().GetAuthor() != nil {
-		builder.Set("author", req.GetNote().GetAuthor())
+	if updateNote.Author.Valid {
+		builder.Set("author", updateNote.Author.String)
 	}
 
 	query, args, err := builder.ToSql()
@@ -214,15 +188,17 @@ func (r *repository) Update(ctx context.Context, req *desc.UpdateRequest) error 
 		return err
 	}
 
-	res, err := r.db.ExecContext(ctx, query, args...)
+	q := db.Query{
+		Name:     "Update",
+		QueryRaw: query,
+	}
+
+	res, err := r.client.DB().ExecContext(ctx, q, args...)
 	if err != nil {
 		return err
 	}
 
-	row, err := res.RowsAffected()
-	if err != nil {
-		return err
-	}
+	row := res.RowsAffected()
 
 	if row != 1 {
 		log.Printf("expected to affect 1 row, affected %d\n", row)

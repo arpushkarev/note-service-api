@@ -2,112 +2,30 @@ package main
 
 import (
 	"context"
-	"fmt"
+	"flag"
 	"log"
-	"net"
-	"net/http"
-	"sync"
 
-	"github.com/arpushkarev/note-service-api/internal/app/api/note_v1"
-	noteRepository "github.com/arpushkarev/note-service-api/internal/repository/note"
-	"github.com/arpushkarev/note-service-api/internal/service/note"
-	desc "github.com/arpushkarev/note-service-api/pkg/note_v1"
-	grpcValidator "github.com/grpc-ecosystem/go-grpc-middleware/validator"
-	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"github.com/arpushkarev/note-service-api/internal/app"
 	_ "github.com/jackc/pgx/stdlib" //just for initialization the driver
-	"github.com/jmoiron/sqlx"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 )
 
-const (
-	grpcPort = "50051"
-	httpPort = "8090"
-)
+var pathConfig string
 
-const (
-	host       = "localhost"
-	port       = "54321"
-	dbUser     = "note-service-user"
-	dbPassword = "note-service-password"
-	dbName     = "note-service"
-	sslMode    = "disable"
-)
+func init() {
+	flag.StringVar(&pathConfig, "config", "config/config.json", "Path to configuration")
+}
 
 func main() {
-	wg := sync.WaitGroup{}
-	wg.Add(2)
+	flag.Parse()
 
-	go func() {
-		defer wg.Done()
-
-		err := startGRPC()
-		if err != nil {
-			log.Fatalf("GRPCserver error: %s", err.Error())
-		}
-	}()
-
-	go func() {
-		defer wg.Done()
-
-		err := startHTTP()
-		if err != nil {
-			log.Fatalf("HTTPserver error: %s", err.Error())
-		}
-	}()
-
-	wg.Wait()
-}
-
-func startGRPC() error {
-	list, err := net.Listen("tcp", fmt.Sprintf("%s:%s", host, grpcPort))
-	if err != nil {
-		return err
-	}
-
-	dbDsn := fmt.Sprintf(
-		"host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
-		host, port, dbUser, dbPassword, dbName, sslMode,
-	)
-
-	db, err := sqlx.Open("pgx", dbDsn)
-	if err != nil {
-		return err
-	}
-	defer db.Close()
-
-	noteRepository := noteRepository.NewRepository(db)
-	noteService := note.NewService(noteRepository)
-
-	s := grpc.NewServer(
-		grpc.UnaryInterceptor(grpcValidator.UnaryServerInterceptor()),
-	)
-
-	desc.RegisterNoteV1Server(s, note_v1.NewImplementation(noteService))
-
-	fmt.Println("GRPC server is running on port:", grpcPort)
-
-	if err = s.Serve(list); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func startHTTP() error {
 	ctx := context.Background()
-	ctx, cancel := context.WithCancel(ctx)
-	defer cancel()
-
-	mux := runtime.NewServeMux()
-	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())} // nolint: staticcheck
-
-	err := desc.RegisterNoteV1HandlerFromEndpoint(ctx, mux, fmt.Sprintf("%s:%s", host, grpcPort), opts)
+	a, err := app.NewApp(ctx, "")
 	if err != nil {
-		return err
+		log.Fatalf("failed to create app %s", err.Error())
 	}
 
-	fmt.Println("HTTP server is running on port:", httpPort)
-
-	return http.ListenAndServe(fmt.Sprintf("%s:%s", host, httpPort), mux)
+	err = a.Run()
+	if err != nil {
+		log.Fatalf("failed to run app %s", err.Error())
+	}
 }
