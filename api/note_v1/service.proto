@@ -64,8 +64,7 @@ message Empty {
 }
 
 message CreateRequest {
-  int64 id = 1;
-  NoteInfo note = 2;
+  NoteInfo note = 1;
 }
 
 message CreateResponse {

@@ -1,3 +1,5 @@
 .idea
 .golangci.pipeline.yaml
 /vendor.protogen/
+main
+zametki.txt

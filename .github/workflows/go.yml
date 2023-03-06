@@ -2,9 +2,9 @@ name: Go
 
 on:
   push:
-    branches: [ main ]
+    branches: [ note-service ]
   pull_request:
-    branches: [ main ]
+    branches: [ note-service ]
 
 jobs:
 

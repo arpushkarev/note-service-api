@@ -7,8 +7,8 @@ import (
 )
 
 // Update service
-func (s *Service) Update(ctx context.Context, updateInfo *model.UpdateNoteInfo) error {
-	err := s.noteRepository.Update(ctx, updateInfo)
+func (s *Service) Update(ctx context.Context, id int64, updateInfo *model.UpdateNoteInfo) error {
+	err := s.noteRepository.Update(ctx, id, updateInfo)
 	if err != nil {
 		return err
 	}

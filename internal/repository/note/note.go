@@ -20,7 +20,7 @@ type Repository interface {
 	Get(ctx context.Context, id int64) (*model.Note, error)
 	GetAll(ctx context.Context, req *desc.Empty) ([]*model.Note, error)
 	Delete(ctx context.Context, id int64) error
-	Update(ctx context.Context, req *model.UpdateNoteInfo) error
+	Update(ctx context.Context, id int64, req *model.UpdateNoteInfo) error
 }
 
 // Repository - db
@@ -28,6 +28,7 @@ type repository struct {
 	client db.Client
 }
 
+// Info structure
 type Info struct {
 	Title  string
 	Text   string
@@ -127,7 +128,7 @@ func (r *repository) GetAll(ctx context.Context, req *desc.Empty) ([]*model.Note
 
 	var notes []*model.Note
 
-	err = r.client.DB().SelectContext(ctx, notes, q, args...)
+	err = r.client.DB().SelectContext(ctx, &notes, q, args...)
 	if err != nil {
 		return nil, err
 	}
@@ -166,21 +167,21 @@ func (r *repository) Delete(ctx context.Context, id int64) error {
 }
 
 // Update the Note by ID
-func (r *repository) Update(ctx context.Context, updateNote *model.UpdateNoteInfo) error {
+func (r *repository) Update(ctx context.Context, id int64, updateNote *model.UpdateNoteInfo) error {
 	builder := sq.Update(tableName).
 		PlaceholderFormat(sq.Dollar).
-		Where(sq.Eq{"id": updateNote})
+		Where(sq.Eq{"id": id})
 
 	if updateNote.Title.Valid {
-		builder.Set("title", updateNote.Title.String)
+		builder = builder.Set("title", updateNote.Title.String)
 	}
 
 	if updateNote.Text.Valid {
-		builder.Set("text", updateNote.Text.String)
+		builder = builder.Set("text", updateNote.Text.String)
 	}
 
 	if updateNote.Author.Valid {
-		builder.Set("author", updateNote.Author.String)
+		builder = builder.Set("author", updateNote.Author.String)
 	}
 
 	query, args, err := builder.ToSql()

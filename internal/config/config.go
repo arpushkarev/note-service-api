@@ -14,27 +14,32 @@ const (
 	password     = "note-service-password"
 )
 
+// DB structure
 type DB struct {
 	DSN                string `json:"dsn"`
 	MaxOpenConnections int32  `json:"max_open_connections"`
 }
 
+// GRPC structure
 type GRPC struct {
 	Host string `json:"host"`
 	Port string `json:"port"`
 }
 
+// HTTP structure
 type HTTP struct {
 	Host string `json:"host"`
 	Port string `json:"port"`
 }
 
+// Config structure
 type Config struct {
 	DB   DB   `json:"db"`
 	GRPC GRPC `json:"grpc"`
 	HTTP HTTP `json:"http"`
 }
 
+// NewConfig starts config
 func NewConfig(path string) (*Config, error) {
 	file, err := os.ReadFile(path)
 	if err != nil {
@@ -50,6 +55,7 @@ func NewConfig(path string) (*Config, error) {
 	return config, nil
 }
 
+// GetDBConfig starts pgxpool config
 func (c *Config) GetDBConfig() (*pgxpool.Config, error) {
 	dbDSN := strings.ReplaceAll(c.DB.DSN, dbPassEscSeq, password)
 
@@ -65,10 +71,12 @@ func (c *Config) GetDBConfig() (*pgxpool.Config, error) {
 	return poolConfig, err
 }
 
+// GetAddress GRPC generates address from config
 func (g *GRPC) GetAddress() string {
 	return net.JoinHostPort(g.Host, g.Port)
 }
 
+// GetAddress HTTP generates address from config
 func (h *HTTP) GetAddress() string {
 	return net.JoinHostPort(h.Host, h.Port)
 }

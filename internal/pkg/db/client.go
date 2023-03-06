@@ -6,7 +6,7 @@ import (
 	"github.com/jackc/pgx/v4/pgxpool"
 )
 
-// Client ...
+// Client structure
 type Client interface {
 	Close() error
 	DB() *DB
@@ -17,7 +17,7 @@ type client struct {
 	closeFunc context.CancelFunc
 }
 
-// NewClient ...
+// NewClient starts client
 func NewClient(ctx context.Context, config *pgxpool.Config) (Client, error) {
 	dbc, err := pgxpool.ConnectConfig(ctx, config)
 	if err != nil {
@@ -37,6 +37,7 @@ func (c *client) Close() error {
 		if c.closeFunc != nil {
 			c.closeFunc()
 		}
+
 		if c.db != nil {
 			c.db.pool.Close()
 		}

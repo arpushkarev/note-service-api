@@ -11,15 +11,11 @@ import (
 )
 
 type serviceProvider struct {
-	db         db.Client
-	configPath string
-	config     *config.Config
-
-	// repositories
+	db             db.Client
+	configPath     string
+	config         *config.Config
 	noteRepository note.Repository
-
-	// services
-	noteService *serv.Service
+	noteService    *serv.Service
 }
 
 func newServiceProvider(configPath string) *serviceProvider {
@@ -28,7 +24,7 @@ func newServiceProvider(configPath string) *serviceProvider {
 	}
 }
 
-// GetDB ...
+// GetDB gets db
 func (s *serviceProvider) GetDB(ctx context.Context) db.Client {
 	if s.db == nil {
 		cfg, err := s.GetConfig().GetDBConfig()
@@ -40,13 +36,14 @@ func (s *serviceProvider) GetDB(ctx context.Context) db.Client {
 		if err != nil {
 			log.Fatalf("can`t connect to db err: %s", err.Error())
 		}
+
 		s.db = dbc
 	}
 
 	return s.db
 }
 
-// GetConfig ...
+// GetConfig gets config
 func (s *serviceProvider) GetConfig() *config.Config {
 	if s.config == nil {
 		cfg, err := config.NewConfig(s.configPath)
@@ -60,7 +57,7 @@ func (s *serviceProvider) GetConfig() *config.Config {
 	return s.config
 }
 
-// GetRepository ...
+// GetRepository gets repo
 func (s *serviceProvider) GetRepository(ctx context.Context) note.Repository {
 	if s.noteRepository == nil {
 		s.noteRepository = note.NewRepository(s.GetDB(ctx))
@@ -69,7 +66,7 @@ func (s *serviceProvider) GetRepository(ctx context.Context) note.Repository {
 	return s.noteRepository
 }
 
-// GetNoteService ...
+// GetNoteService gets service
 func (s *serviceProvider) GetNoteService(ctx context.Context) *serv.Service {
 	if s.noteService == nil {
 		s.noteService = serv.NewService(s.GetRepository(ctx))

@@ -20,34 +20,34 @@ import (
 	"google.golang.org/grpc"
 )
 
-// App ...
+// App structure
 type App struct {
 	noteImpl        *noteV1.Implementation
 	serviceProvider *serviceProvider
-
-	pathConfig string
-
-	grpcServer *grpc.Server
-	mux        *runtime.ServeMux
+	pathConfig      string
+	grpcServer      *grpc.Server
+	mux             *runtime.ServeMux
 }
 
-// NewApp ...
+// NewApp structure
 func NewApp(ctx context.Context, pathConfig string) (*App, error) {
 	a := &App{
 		pathConfig: pathConfig,
 	}
+
 	err := a.initDeps(ctx)
 
 	return a, err
 }
 
-// Run ...
+// Run servers
 func (a *App) Run() error {
 	defer func() {
 		a.serviceProvider.db.Close()
 	}()
 
 	wg := sync.WaitGroup{}
+
 	wg.Add(2)
 
 	go func() {
@@ -78,7 +78,7 @@ func (a *App) initDeps(ctx context.Context) error {
 		a.initServiceProvider,
 		a.initServer,
 		a.initGRPCServer,
-		a.initHTTPHandlers,
+		a.initHTTPServer,
 	}
 
 	for _, f := range inits {
@@ -93,6 +93,7 @@ func (a *App) initDeps(ctx context.Context) error {
 
 func (a *App) initServiceProvider(_ context.Context) error {
 	a.serviceProvider = newServiceProvider(a.pathConfig)
+
 	return nil
 }
 
@@ -112,10 +113,9 @@ func (a *App) initGRPCServer(_ context.Context) error {
 	return nil
 }
 
-func (a *App) initHTTPHandlers(ctx context.Context) error {
+func (a *App) initHTTPServer(ctx context.Context) error {
 	a.mux = runtime.NewServeMux()
 
-	//nolint:staticcheck
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
 	err := desc.RegisterNoteV1HandlerFromEndpoint(ctx, a.mux, a.serviceProvider.GetConfig().GRPC.GetAddress(), opts)
@@ -136,7 +136,7 @@ func (a *App) startGRPC() error {
 		return err
 	}
 
-	log.Printf("Run gRPC server on %s host\n", a.serviceProvider.GetConfig().GRPC.GetAddress())
+	log.Printf("Started GRPC server on %s host\n", a.serviceProvider.GetConfig().GRPC.GetAddress())
 
 	return nil
 }
@@ -146,7 +146,7 @@ func (a *App) startHTTP() error {
 		return err
 	}
 
-	log.Printf("Run http handler on %s host\n", a.serviceProvider.GetConfig().HTTP.GetAddress())
+	log.Printf("Started HTTP server on %s host\n", a.serviceProvider.GetConfig().HTTP.GetAddress())
 
 	return nil
 }

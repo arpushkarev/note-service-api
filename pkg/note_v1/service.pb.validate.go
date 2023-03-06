@@ -592,8 +592,6 @@ func (m *CreateRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Id
-
 	if all {
 		switch v := interface{}(m.GetNote()).(type) {
 		case interface{ ValidateAll() error }:

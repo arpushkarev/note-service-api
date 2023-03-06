@@ -19,7 +19,8 @@ func main() {
 	flag.Parse()
 
 	ctx := context.Background()
-	a, err := app.NewApp(ctx, "")
+
+	a, err := app.NewApp(ctx, pathConfig)
 	if err != nil {
 		log.Fatalf("failed to create app %s", err.Error())
 	}

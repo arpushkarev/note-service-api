@@ -9,7 +9,11 @@ import (
 
 // Update note by ID
 func (i *Implementation) Update(ctx context.Context, req *desc.UpdateRequest) (*desc.Empty, error) {
-	err := i.noteService.Update(ctx, converter.ToModelUpdateNoteInfo(req.GetNote()))
+	err := i.noteService.Update(
+		ctx,
+		req.GetId(),
+		converter.ToModelUpdateNoteInfo(req.GetNote()),
+	)
 	if err != nil {
 		return nil, err
 	}
