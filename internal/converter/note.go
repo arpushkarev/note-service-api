@@ -5,6 +5,7 @@ import (
 
 	"github.com/arpushkarev/note-service-api/internal/model"
 	desc "github.com/arpushkarev/note-service-api/pkg/note_v1"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 // ToModelNoteInfo converts structure from client query into model
@@ -27,9 +28,16 @@ func FromModelNoteInfo(model *model.NoteInfo) *desc.NoteInfo {
 
 // FromModelNote converts structure from model into client response
 func FromModelNote(note *model.Note) *desc.Note {
+	var updatedAt *timestamppb.Timestamp
+	if note.UpdatedAt.Valid {
+		updatedAt = timestamppb.New(note.UpdatedAt.Time)
+	}
+
 	return &desc.Note{
-		Id:   note.ID,
-		Note: FromModelNoteInfo(note.Info),
+		Id:        note.ID,
+		Note:      FromModelNoteInfo(note.Info),
+		CreatedAt: timestamppb.New(note.CreatedAt),
+		UpdatedAt: updatedAt,
 	}
 }
 

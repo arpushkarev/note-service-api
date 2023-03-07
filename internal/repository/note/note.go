@@ -3,6 +3,7 @@ package note
 import (
 	"context"
 	"log"
+	"time"
 
 	sq "github.com/Masterminds/squirrel"
 	"github.com/arpushkarev/note-service-api/internal/model"
@@ -170,6 +171,7 @@ func (r *repository) Delete(ctx context.Context, id int64) error {
 func (r *repository) Update(ctx context.Context, id int64, updateNote *model.UpdateNoteInfo) error {
 	builder := sq.Update(tableName).
 		PlaceholderFormat(sq.Dollar).
+		Set("updated_at", time.Now()).
 		Where(sq.Eq{"id": id})
 
 	if updateNote.Title.Valid {

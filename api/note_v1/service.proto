@@ -5,6 +5,7 @@ package api.note_v1;
 import "google/api/annotations.proto";
 import "validate/validate.proto";
 import "google/protobuf/wrappers.proto";
+import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/arpushkarev/note-service-api/pkg/note";
 
@@ -51,6 +52,8 @@ message NoteInfo {
 message Note {
   int64 id = 1;
   NoteInfo note = 2;
+  google.protobuf.Timestamp created_at = 3;
+  google.protobuf.Timestamp updated_at = 4;
 }
 
 message UpdateNoteInfo {

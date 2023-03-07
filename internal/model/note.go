@@ -1,6 +1,9 @@
 package model
 
-import "database/sql"
+import (
+	"database/sql"
+	"time"
+)
 
 // NoteInfo structure
 type NoteInfo struct {
@@ -18,6 +21,8 @@ type UpdateNoteInfo struct {
 
 // Note structure
 type Note struct {
-	ID   int64     `db:"id"`
-	Info *NoteInfo `db:""`
+	ID        int64        `db:"id"`
+	Info      *NoteInfo    `db:""`
+	CreatedAt time.Time    `db:"created_at"`
+	UpdatedAt sql.NullTime `db:"updated_at"`
 }
