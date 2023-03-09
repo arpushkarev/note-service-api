@@ -5,10 +5,11 @@ import (
 
 	"github.com/arpushkarev/note-service-api/internal/converter"
 	desc "github.com/arpushkarev/note-service-api/pkg/note_v1"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 // Update note by ID
-func (i *Implementation) Update(ctx context.Context, req *desc.UpdateRequest) (*desc.Empty, error) {
+func (i *Implementation) Update(ctx context.Context, req *desc.UpdateRequest) (*emptypb.Empty, error) {
 	err := i.noteService.Update(
 		ctx,
 		req.GetId(),
@@ -18,5 +19,5 @@ func (i *Implementation) Update(ctx context.Context, req *desc.UpdateRequest) (*
 		return nil, err
 	}
 
-	return &desc.Empty{}, nil
+	return &emptypb.Empty{}, nil
 }

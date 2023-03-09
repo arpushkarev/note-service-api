@@ -5,11 +5,12 @@ import (
 
 	"github.com/arpushkarev/note-service-api/internal/converter"
 	desc "github.com/arpushkarev/note-service-api/pkg/note_v1"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 // GetAll notes
-func (i *Implementation) GetAll(ctx context.Context, req *desc.Empty) (*desc.GetAllResponse, error) {
-	res, err := i.noteService.GetAll(ctx, req)
+func (i *Implementation) GetAll(ctx context.Context, _ *emptypb.Empty) (*desc.GetAllResponse, error) {
+	res, err := i.noteService.GetAll(ctx)
 	if err != nil {
 		return nil, err
 	}

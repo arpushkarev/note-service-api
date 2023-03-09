@@ -6,6 +6,7 @@ import "google/api/annotations.proto";
 import "validate/validate.proto";
 import "google/protobuf/wrappers.proto";
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
 
 option go_package = "github.com/arpushkarev/note-service-api/pkg/note";
 
@@ -23,20 +24,20 @@ service NoteV1 {
     };
   }
 
-  rpc GetAll (Empty) returns (GetAllResponse){
+  rpc GetAll (google.protobuf.Empty) returns (GetAllResponse){
     option (google.api.http) = {
       get: "/note/v1/get_all"
     };
   }
 
-  rpc Update (UpdateRequest) returns (Empty){
+  rpc Update (UpdateRequest) returns (google.protobuf.Empty){
     option (google.api.http) = {
       put: "/note/v1/update"
       body: "*"
     };
   }
 
-  rpc Delete (DeleteRequest) returns (Empty){
+  rpc Delete (DeleteRequest) returns (google.protobuf.Empty){
     option (google.api.http) = {
       delete: "/note/v1/delete"
     };
@@ -60,10 +61,6 @@ message UpdateNoteInfo {
   google.protobuf.StringValue title = 1 [(validate.rules).string = {pattern: "(?i)^[A-Za-z]+$",max_bytes: 32}];
   google.protobuf.StringValue text = 2 [(validate.rules).string.not_contains = "сука"];
   google.protobuf.StringValue author = 3;
-}
-
-message Empty {
-
 }
 
 message CreateRequest {

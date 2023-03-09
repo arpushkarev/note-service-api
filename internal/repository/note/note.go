@@ -2,13 +2,12 @@ package note
 
 import (
 	"context"
-	"log"
+	"fmt"
 	"time"
 
 	sq "github.com/Masterminds/squirrel"
 	"github.com/arpushkarev/note-service-api/internal/model"
 	"github.com/arpushkarev/note-service-api/internal/pkg/db"
-	desc "github.com/arpushkarev/note-service-api/pkg/note_v1"
 )
 
 const (
@@ -19,7 +18,7 @@ const (
 type Repository interface {
 	Create(ctx context.Context, noteInfo *model.NoteInfo) (int64, error)
 	Get(ctx context.Context, id int64) (*model.Note, error)
-	GetAll(ctx context.Context, req *desc.Empty) ([]*model.Note, error)
+	GetAll(ctx context.Context) ([]*model.Note, error)
 	Delete(ctx context.Context, id int64) error
 	Update(ctx context.Context, id int64, req *model.UpdateNoteInfo) error
 }
@@ -27,19 +26,6 @@ type Repository interface {
 // Repository - db
 type repository struct {
 	client db.Client
-}
-
-// Info structure
-type Info struct {
-	Title  string
-	Text   string
-	Author string
-}
-
-// Note structure
-type Note struct {
-	ID   int64
-	Info Info
 }
 
 // NewRepository - initialisation
@@ -112,7 +98,7 @@ func (r *repository) Get(ctx context.Context, id int64) (*model.Note, error) {
 }
 
 // GetAll notes from DB
-func (r *repository) GetAll(ctx context.Context, req *desc.Empty) ([]*model.Note, error) {
+func (r *repository) GetAll(ctx context.Context) ([]*model.Note, error) {
 	builder := sq.Select("id", "title", "text", "author").
 		PlaceholderFormat(sq.Dollar).
 		From(tableName)
@@ -161,7 +147,8 @@ func (r *repository) Delete(ctx context.Context, id int64) error {
 	row := res.RowsAffected()
 
 	if row != 1 {
-		log.Printf("expected to affect 1 row, affected %d\n", row)
+		err := fmt.Errorf("Expected to affect 1 row, affected %d\n", row)
+		return err
 	}
 
 	return nil
@@ -204,7 +191,8 @@ func (r *repository) Update(ctx context.Context, id int64, updateNote *model.Upd
 	row := res.RowsAffected()
 
 	if row != 1 {
-		log.Printf("expected to affect 1 row, affected %d\n", row)
+		err := fmt.Errorf("Expected to affect 1 row, affected %d\n", row)
+		return err
 	}
 
 	return nil

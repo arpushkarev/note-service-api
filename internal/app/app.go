@@ -2,7 +2,6 @@ package app
 
 import (
 	"context"
-	//"fmt"
 	"log"
 	"net"
 	"net/http"
@@ -11,11 +10,8 @@ import (
 	noteV1 "github.com/arpushkarev/note-service-api/internal/app/api/note_v1"
 	"google.golang.org/grpc/credentials/insecure"
 
-	//"github.com/arpushkarev/note-service-api/internal/interceptors"
 	desc "github.com/arpushkarev/note-service-api/pkg/note_v1"
-	//grpcMiddleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpcValidator "github.com/grpc-ecosystem/go-grpc-middleware/validator"
-	//"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 )

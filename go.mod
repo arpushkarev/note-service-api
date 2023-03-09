@@ -4,6 +4,7 @@ go 1.19
 
 require (
 	github.com/Masterminds/squirrel v1.5.3
+	github.com/brianvoe/gofakeit/v6 v6.20.2
 	github.com/envoyproxy/protoc-gen-validate v0.9.1
 	github.com/georgysavva/scany v1.2.1
 	github.com/grpc-ecosystem/go-grpc-middleware v1.3.0

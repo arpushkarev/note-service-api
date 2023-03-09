@@ -21,6 +21,7 @@ import (
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 // Suppress "imported and not used" errors
@@ -102,7 +103,7 @@ func local_request_NoteV1_Get_0(ctx context.Context, marshaler runtime.Marshaler
 }
 
 func request_NoteV1_GetAll_0(ctx context.Context, marshaler runtime.Marshaler, client NoteV1Client, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq Empty
+	var protoReq emptypb.Empty
 	var metadata runtime.ServerMetadata
 
 	msg, err := client.GetAll(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -111,7 +112,7 @@ func request_NoteV1_GetAll_0(ctx context.Context, marshaler runtime.Marshaler, c
 }
 
 func local_request_NoteV1_GetAll_0(ctx context.Context, marshaler runtime.Marshaler, server NoteV1Server, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq Empty
+	var protoReq emptypb.Empty
 	var metadata runtime.ServerMetadata
 
 	msg, err := server.GetAll(ctx, &protoReq)

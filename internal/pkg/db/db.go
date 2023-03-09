@@ -44,3 +44,12 @@ func (db *DB) QueryContext(ctx context.Context, q Query, args ...interface{}) (p
 func (db *DB) QueryRowContext(ctx context.Context, q Query, args ...interface{}) pgxV4.Row {
 	return db.pool.QueryRow(ctx, q.QueryRaw, args...)
 }
+
+// Close method
+func (db *DB) Close() error {
+	if db.pool != nil {
+		db.pool.Close()
+	}
+
+	return nil
+}

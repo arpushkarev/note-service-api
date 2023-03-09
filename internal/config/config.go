@@ -32,6 +32,12 @@ type HTTP struct {
 	Port string `json:"port"`
 }
 
+// ConfigIntfc ...
+type ConfigIntfc interface {
+	GetDBConfig() (*pgxpool.Config, error)
+	GetAddress() string
+}
+
 // Config structure
 type Config struct {
 	DB   DB   `json:"db"`
