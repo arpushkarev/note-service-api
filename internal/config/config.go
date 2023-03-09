@@ -33,7 +33,7 @@ type HTTP struct {
 }
 
 // ConfigIntfc ...
-type ConfigIntfc interface {
+type IConfig interface {
 	GetDBConfig() (*pgxpool.Config, error)
 	GetAddress() string
 }
