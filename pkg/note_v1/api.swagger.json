@@ -50,7 +50,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/note_v1Empty"
+              "properties": {}
             }
           },
           "default": {
@@ -134,7 +134,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/note_v1Empty"
+              "properties": {}
             }
           },
           "default": {
@@ -164,14 +164,8 @@
     "note_v1CreateRequest": {
       "type": "object",
       "properties": {
-        "title": {
-          "type": "string"
-        },
-        "text": {
-          "type": "string"
-        },
-        "author": {
-          "type": "string"
+        "note": {
+          "$ref": "#/definitions/note_v1NoteInfo"
         }
       }
     },
@@ -183,9 +177,6 @@
           "format": "int64"
         }
       }
-    },
-    "note_v1Empty": {
-      "type": "object"
     },
     "note_v1GetAllResponse": {
       "type": "object",
@@ -213,6 +204,36 @@
           "type": "string",
           "format": "int64"
         },
+        "note": {
+          "$ref": "#/definitions/note_v1NoteInfo"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "note_v1NoteInfo": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "author": {
+          "type": "string"
+        }
+      }
+    },
+    "note_v1UpdateNoteInfo": {
+      "type": "object",
+      "properties": {
         "title": {
           "type": "string"
         },
@@ -231,14 +252,8 @@
           "type": "string",
           "format": "int64"
         },
-        "title": {
-          "type": "string"
-        },
-        "text": {
-          "type": "string"
-        },
-        "author": {
-          "type": "string"
+        "note": {
+          "$ref": "#/definitions/note_v1UpdateNoteInfo"
         }
       }
     },

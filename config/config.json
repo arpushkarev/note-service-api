@@ -1,0 +1,16 @@
+{
+  "db": {
+    "dsn": "user=note-service-user dbname=note-service password={password} host=localhost port=54321 sslmode=disable",
+    "max_open_connections": 10
+  },
+
+  "grpc": {
+    "host": "localhost",
+    "port": "50051"
+  },
+
+  "http": {
+    "host": "localhost",
+    "port": "8090"
+  }
+}

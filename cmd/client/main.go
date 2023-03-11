@@ -5,8 +5,11 @@ import (
 	"log"
 
 	desc "github.com/arpushkarev/note-service-api/pkg/note_v1"
+	"github.com/brianvoe/gofakeit/v6"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/protobuf/types/known/emptypb"
+	"google.golang.org/protobuf/types/known/wrapperspb"
 )
 
 const address = "localhost: 50051"
@@ -22,38 +25,42 @@ func main() {
 	ctx := context.Background()
 
 	resCreate, err := client.Create(ctx, &desc.CreateRequest{
-		Title:  "Repka",
-		Text:   "Posadil ded repku4",
-		Author: "Some folk2",
+		Note: &desc.NoteInfo{
+			Title:  gofakeit.Word(),
+			Text:   gofakeit.SentenceSimple(),
+			Author: gofakeit.Name(),
+		},
 	})
 	if err != nil {
 		log.Println(err.Error())
 	}
 
 	resGet, err := client.Get(ctx, &desc.GetRequest{
-		Id: 1,
+		Id: gofakeit.Int64(),
 	})
 	if err != nil {
 		log.Println(err.Error())
 	}
 
-	resGetAll, err := client.GetAll(ctx, &desc.Empty{})
+	resGetAll, err := client.GetAll(ctx, &emptypb.Empty{})
 	if err != nil {
 		log.Println(err.Error())
 	}
 
 	resUpdate, err := client.Update(ctx, &desc.UpdateRequest{
-		Id:     2,
-		Title:  "Task1-ruchka4",
-		Text:   "Updated",
-		Author: "Pushkarev",
+		Id: gofakeit.Int64(),
+		Note: &desc.UpdateNoteInfo{
+			Title:  &wrapperspb.StringValue{Value: gofakeit.Word()},
+			Text:   &wrapperspb.StringValue{Value: gofakeit.SentenceSimple()},
+			Author: &wrapperspb.StringValue{Value: gofakeit.Name()},
+		},
 	})
 	if err != nil {
 		log.Println(err.Error())
 	}
 
 	resDelete, err := client.Delete(ctx, &desc.DeleteRequest{
-		Id: 3,
+		Id: int64(gofakeit.Number(17, 19)),
 	})
 	if err != nil {
 		log.Println(err.Error())
