@@ -32,10 +32,11 @@ type HTTP struct {
 	Port string `json:"port"`
 }
 
-// ConfigIntfc ...
+// IConfig ...
 type IConfig interface {
 	GetDBConfig() (*pgxpool.Config, error)
-	GetAddress() string
+	GetGRPCAddress() string
+	GetHTTPAddress() string
 }
 
 // Config structure
@@ -77,12 +78,12 @@ func (c *Config) GetDBConfig() (*pgxpool.Config, error) {
 	return poolConfig, err
 }
 
-// GetAddress GRPC generates address from config
-func (g *GRPC) GetAddress() string {
-	return net.JoinHostPort(g.Host, g.Port)
+// GetGRPCAddress GRPC generates address from config
+func (c *Config) GetGRPCAddress() string {
+	return net.JoinHostPort(c.GRPC.Host, c.GRPC.Port)
 }
 
-// GetAddress HTTP generates address from config
-func (h *HTTP) GetAddress() string {
-	return net.JoinHostPort(h.Host, h.Port)
+// GetHTTPAddress HTTP generates address from config
+func (c *Config) GetHTTPAddress() string {
+	return net.JoinHostPort(c.HTTP.Host, c.HTTP.Port)
 }

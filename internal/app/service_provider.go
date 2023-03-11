@@ -13,7 +13,7 @@ import (
 type serviceProvider struct {
 	db             db.Client
 	configPath     string
-	config         *config.Config
+	config         config.IConfig
 	noteRepository note.Repository
 	noteService    *serv.Service
 }
@@ -44,7 +44,7 @@ func (s *serviceProvider) GetDB(ctx context.Context) db.Client {
 }
 
 // GetConfig gets config
-func (s *serviceProvider) GetConfig() *config.Config {
+func (s *serviceProvider) GetConfig() config.IConfig {
 	if s.config == nil {
 		cfg, err := config.NewConfig(s.configPath)
 		if err != nil {

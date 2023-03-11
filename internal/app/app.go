@@ -114,7 +114,7 @@ func (a *App) initHTTPServer(ctx context.Context) error {
 
 	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
-	err := desc.RegisterNoteV1HandlerFromEndpoint(ctx, a.mux, a.serviceProvider.GetConfig().GRPC.GetAddress(), opts)
+	err := desc.RegisterNoteV1HandlerFromEndpoint(ctx, a.mux, a.serviceProvider.config.GetGRPCAddress(), opts)
 	if err != nil {
 		return err
 	}
@@ -123,7 +123,7 @@ func (a *App) initHTTPServer(ctx context.Context) error {
 }
 
 func (a *App) startGRPC() error {
-	list, err := net.Listen("tcp", a.serviceProvider.GetConfig().GRPC.GetAddress())
+	list, err := net.Listen("tcp", a.serviceProvider.GetConfig().GetGRPCAddress())
 	if err != nil {
 		return err
 	}
@@ -132,17 +132,17 @@ func (a *App) startGRPC() error {
 		return err
 	}
 
-	log.Printf("Started GRPC server on %s host\n", a.serviceProvider.GetConfig().GRPC.GetAddress())
+	log.Printf("Started GRPC server on %s host\n", a.serviceProvider.GetConfig().GetGRPCAddress())
 
 	return nil
 }
 
 func (a *App) startHTTP() error {
-	if err := http.ListenAndServe(a.serviceProvider.GetConfig().HTTP.GetAddress(), a.mux); err != nil {
+	if err := http.ListenAndServe(a.serviceProvider.GetConfig().GetHTTPAddress(), a.mux); err != nil {
 		return err
 	}
 
-	log.Printf("Started HTTP server on %s host\n", a.serviceProvider.GetConfig().HTTP.GetAddress())
+	log.Printf("Started HTTP server on %s host\n", a.serviceProvider.GetConfig().GetHTTPAddress())
 
 	return nil
 }
