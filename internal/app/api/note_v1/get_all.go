@@ -10,7 +10,7 @@ import (
 
 // GetAll notes
 func (i *Implementation) GetAll(ctx context.Context, _ *emptypb.Empty) (*desc.GetAllResponse, error) {
-	res, err := i.noteService.GetAll(ctx)
+	res, err := i.NoteService.GetAll(ctx)
 	if err != nil {
 		return nil, err
 	}
