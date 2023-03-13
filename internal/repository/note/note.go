@@ -1,5 +1,7 @@
 package note
 
+//go:generate mockgen --build_flags=--mod=mod -destination=mocks/mock_repository.go -package=mocks . Repository
+
 import (
 	"context"
 	"fmt"
@@ -147,7 +149,7 @@ func (r *repository) Delete(ctx context.Context, id int64) error {
 	row := res.RowsAffected()
 
 	if row != 1 {
-		err := fmt.Errorf("Expected to affect 1 row, affected %d\n", row)
+		err := fmt.Errorf("expected to affect 1 row, affected %d", row)
 		return err
 	}
 
@@ -191,7 +193,7 @@ func (r *repository) Update(ctx context.Context, id int64, updateNote *model.Upd
 	row := res.RowsAffected()
 
 	if row != 1 {
-		err := fmt.Errorf("Expected to affect 1 row, affected %d\n", row)
+		err := fmt.Errorf("expected to affect 1 row, affected %d", row)
 		return err
 	}
 

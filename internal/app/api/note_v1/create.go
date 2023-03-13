@@ -9,7 +9,7 @@ import (
 
 // Create note with 3 fields Title, Text, Author
 func (i *Implementation) Create(ctx context.Context, note *desc.CreateRequest) (*desc.CreateResponse, error) {
-	id, err := i.noteService.Create(ctx, converter.ToModelNoteInfo(note.GetNote()))
+	id, err := i.NoteService.Create(ctx, converter.ToModelNoteInfo(note.GetNote()))
 	if err != nil {
 		return nil, err
 	}

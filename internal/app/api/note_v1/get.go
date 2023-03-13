@@ -9,7 +9,7 @@ import (
 
 // Get note by ID
 func (i *Implementation) Get(ctx context.Context, req *desc.GetRequest) (*desc.GetResponse, error) {
-	res, err := i.noteService.Get(ctx, req.GetId())
+	res, err := i.NoteService.Get(ctx, req.GetId())
 	if err != nil {
 		return nil, err
 	}
