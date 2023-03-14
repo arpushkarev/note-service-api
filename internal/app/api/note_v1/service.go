@@ -9,12 +9,20 @@ import (
 type Implementation struct {
 	desc.UnimplementedNoteV1Server
 
-	noteService *note.Service
+	NoteService *note.Service
 }
 
 // NewImplementation starts connect
 func NewImplementation(noteService *note.Service) *Implementation {
 	return &Implementation{
-		noteService: noteService,
+		NoteService: noteService,
+	}
+}
+
+// NewMockNoteV1 initialization
+func NewMockNoteV1(i Implementation) *Implementation {
+	return &Implementation{
+		desc.UnimplementedNoteV1Server{},
+		i.NoteService,
 	}
 }
